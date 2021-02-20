@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import "./bootstrap.min.css";
+import "./styles/Login.module.css";
 import App from "./App";
 import { firebase } from "./lib/firebase";
 import { FirebaseContext } from "./context/firebase";
