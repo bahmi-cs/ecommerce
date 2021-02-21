@@ -9,6 +9,8 @@ const RegisterScreen = () => {
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
 
+  const db = firebase.firestore();
+
   const [fullName, setFullName] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -30,6 +32,22 @@ const RegisterScreen = () => {
     password === "" ||
     confirmPassword === "";
 
+  async function addToUsersCollection(result) {
+    console.log("resut: ", result);
+    const res = await db.collection("users").add({
+      uid: result.user.uid,
+      fullName: fullName,
+      email: email,
+      password: password,
+      country: country,
+      province: province,
+      city: city,
+      postalCode: postalCode,
+      address: address,
+      shippingInstruction: shippingInstruction,
+    });
+  }
+
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -43,6 +61,7 @@ const RegisterScreen = () => {
           result.user.updateProfile({
             displayName: fullName,
           });
+          addToUsersCollection(result);
         })
         .then(() => {
           history.push(ROUTES.BROWSE);
@@ -56,7 +75,6 @@ const RegisterScreen = () => {
   };
 
   return (
-    // <FormContainer>
     <Container>
       <Row className="justify-content-md-center">
         <Col>
@@ -222,7 +240,6 @@ const RegisterScreen = () => {
         </Col>
       </Row>
     </Container>
-    // </FormContainer>
   );
 };
 

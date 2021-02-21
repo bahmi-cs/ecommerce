@@ -45,12 +45,12 @@ const Header = () => {
                 Bag
               </Nav.Link>
               {user ? (
-                <NavDropdown title={user.displayName} id="username">
+                <NavDropdown title="Account" id="username">
                   <Link to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </Link>
                   <NavDropdown.Item onClick={() => firebase.auth().signOut()}>
-                    Logout
+                    Sign Out
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
