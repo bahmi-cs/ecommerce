@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { FirebaseContext } from "../context/firebase";
-import { Message, FormContainer } from "../components";
+import { Message } from "../components";
 import * as ROUTES from "../constants/routes";
 
 const RegisterScreen = () => {
@@ -30,13 +30,19 @@ const RegisterScreen = () => {
     mobileNumber === "" ||
     email === "" ||
     password === "" ||
-    confirmPassword === "";
+    confirmPassword === "" ||
+    country === "" ||
+    province === "" ||
+    city === "" ||
+    postalCode === "" ||
+    address === "" ||
+    shippingInstruction === "";
 
   async function addToUsersCollection(result) {
-    console.log("resut: ", result);
-    const res = await db.collection("users").add({
+    const res = await db.collection("users").doc(result.user.uid).set({
       uid: result.user.uid,
       fullName: fullName,
+      mobileNumber: mobileNumber,
       email: email,
       password: password,
       country: country,

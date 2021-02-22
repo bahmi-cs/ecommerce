@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { Header, Footer } from "./components";
 import {
@@ -7,6 +7,8 @@ import {
   RegisterScreen,
   HomeScreen,
   BrowseScreen,
+  BagScreen,
+  ProfileScreen,
 } from "./screens";
 import * as ROUTES from "./constants/routes";
 import { IsUserRedirect, ProtectedRoute } from "./helpers/routes";
@@ -35,6 +37,8 @@ function App() {
             >
               <RegisterScreen />
             </IsUserRedirect>
+            <Route path="/bag/:id?" component={BagScreen} />
+            <Route path="/profile" component={ProfileScreen} />
             <IsUserRedirect
               user={user}
               loggedInPath={ROUTES.BROWSE}

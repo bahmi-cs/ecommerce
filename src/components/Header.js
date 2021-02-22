@@ -1,16 +1,14 @@
 import React, { useContext } from "react";
 import { Nav, Navbar, NavDropdown, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useAuthListener } from "../hooks";
+import { LinkContainer } from "react-router-bootstrap";
+import { useHistory } from "react-router-dom";
 import { FirebaseContext } from "../context/firebase";
+import { useAuthListener } from "../hooks";
 
 const Header = () => {
+  const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
   const { user } = useAuthListener();
-
-  // const myuser = firebase.auth().currentUser || {};
-
-  console.log("user", user);
 
   return (
     <header>
@@ -46,10 +44,15 @@ const Header = () => {
               </Nav.Link>
               {user ? (
                 <NavDropdown title="Account" id="username">
-                  <Link to="/profile">
+                  <LinkContainer to="/profile">
                     <NavDropdown.Item>Profile</NavDropdown.Item>
-                  </Link>
-                  <NavDropdown.Item onClick={() => firebase.auth().signOut()}>
+                  </LinkContainer>
+                  <NavDropdown.Item
+                    onClick={() => {
+                      firebase.auth().signOut();
+                      history.push("/signin");
+                    }}
+                  >
                     Sign Out
                   </NavDropdown.Item>
                 </NavDropdown>
