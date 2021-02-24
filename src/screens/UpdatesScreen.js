@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import {
-  Row,
-  Col,
-  Image,
-  ListGroup,
-  Card,
-  Button,
-  Form,
-} from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 import { Loader, Message } from "../components";
-import sampleImage from "../assets/img/airpods.jpg";
 
 const UpdatesScreen = ({ history, match }) => {
   const [updates, setUpdates] = useState([]);
@@ -34,7 +24,7 @@ const UpdatesScreen = ({ history, match }) => {
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message>{error}</Message>
       ) : (
         <>
           <Row>

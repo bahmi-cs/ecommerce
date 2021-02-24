@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Row,
@@ -9,17 +9,40 @@ import {
   Button,
   Card,
 } from "react-bootstrap";
-import Message from "../components/Message";
+import { Message } from "../components";
+import sampleImage from "../assets/img/airpods.jpg";
 
-const BagScreen = ({ match, location, history }) => {
-  //   const productId = match.params.id;
-  //   const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+const BagScreen = ({ match, location }) => {
+  const [cartItems, setCartItems] = useState([]);
+  const productId = match.params.id;
+  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
 
-  //   const cart = useSelector((state) => state.cart);
-  //   const { cartItems } = cart;
-
-  //   console.log(cartItems);
-  const cartItems = [];
+  const bagItems = [
+    {
+      date: "Wednesday Feb 24, 2021",
+      name: "Airpods Wireless Bluetooth Headphones",
+      price: 161,
+      seller: "Hudson Store",
+      qty: 1,
+      countInStock: 10,
+    },
+    {
+      date: "Wednesday Feb 24, 2021",
+      name: "Airpods Wireless Bluetooth Headphones",
+      price: 161,
+      seller: "Hudson Store",
+      qty: 1,
+      countInStock: 10,
+    },
+    {
+      date: "Wednesday Feb 24, 2021",
+      name: "Airpods Wireless Bluetooth Headphones",
+      price: 161,
+      seller: "Hudson Store",
+      qty: 1,
+      countInStock: 10,
+    },
+  ];
 
   //   useEffect(() => {
   //     if (productId) {
@@ -38,24 +61,32 @@ const BagScreen = ({ match, location, history }) => {
   return (
     <Row>
       <Col md={8}>
-        <h1>Shopping Bag</h1>
-        {cartItems.length === 0 ? (
+        <h1>Bag</h1>
+        {bagItems.length === 0 ? (
           <Message variant="info">
             Your cart is empty <Link to="/">Go Back</Link>
           </Message>
         ) : (
           <ListGroup variant="flush">
-            {cartItems.map((item) => (
-              <ListGroup.Item key={item.product}>
+            {bagItems.map((item) => (
+              <ListGroup.Item key={item.id}>
                 <Row>
-                  <Col md={2}>
-                    <Image src={item.image} alt={item.name} fluid rounded />
-                  </Col>
                   <Col md={3}>
-                    <Link to={`/product/${item.product}`}>{item.name}</Link>
+                    <Image src={sampleImage} alt={item.name} fluid rounded />
                   </Col>
-                  <Col md={2}>${item.price}</Col>
-                  <Col md={2}>
+                  <Col md={5}>
+                    <div className="mb-1">{item.date}</div>
+                    <Link to={`/product/${item.name}`}>{item.name}</Link>
+                    <br />
+                    <div className="mt-3">
+                      <strong>Price: </strong>CAD${item.price}
+                    </div>
+                    <div>
+                      <strong>Seller: </strong>
+                      {item.seller}
+                    </div>
+                  </Col>
+                  <Col md={2} className="d-flex align-items-center">
                     <Form.Control
                       as="select"
                       value={item.qty}
@@ -65,20 +96,14 @@ const BagScreen = ({ match, location, history }) => {
                         // );
                       }}
                     >
-                      {
-                        /* 
-                            if the count in stock is 5,
-                            this will give an array with [0,1,2,3,4]
-                        */
-                        [...Array(item.countInStock).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))
-                      }
+                      {[...Array(item.countInStock).keys()].map((x) => (
+                        <option key={x + 1} value={x + 1}>
+                          {x + 1}
+                        </option>
+                      ))}
                     </Form.Control>
                   </Col>
-                  <Col md={2}>
+                  <Col md={2} className="d-flex align-items-center">
                     <Button
                       type="button"
                       variant="light"
@@ -94,6 +119,38 @@ const BagScreen = ({ match, location, history }) => {
         )}
       </Col>
       <Col md={4}>
+        <Card className="mb-2">
+          <ListGroup variant="flush">
+            <ListGroup.Item>
+              {/* <h2></h2>
+              <h5 className="float-right"></h5> */}
+              <div class="row">
+                <div class="col-md-12 d-flex">
+                  <strong>Shipping: </strong>
+                  <div class="ml-auto">Same day</div>
+                </div>
+              </div>
+            </ListGroup.Item>
+          </ListGroup>
+        </Card>
+        <Card className="mb-2">
+          <ListGroup variant="flush">
+            <ListGroup.Item>
+              <div class="row">
+                <div class="col-md-12 d-flex">
+                  <strong className="mr-2">Ship to: </strong> {"Tom Hanks"}{" "}
+                  <br />
+                  {"3146 Orleans Rd"}
+                  <br />
+                  {"Mississauga, ON"}
+                  <br />
+                  {"L5L 5L4"}
+                </div>
+              </div>
+              <strong className="mr-2">Customer ID: </strong> 2956288910 <br />
+            </ListGroup.Item>
+          </ListGroup>
+        </Card>
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>
