@@ -69,8 +69,8 @@ const BagScreen = ({ match, location }) => {
         ) : (
           <ListGroup variant="flush">
             {bagItems.map((item) => (
-              <ListGroup.Item key={item.id}>
-                <Row>
+              <Card className="mb-3" key={item.id}>
+                <Row className="d-flex align-items-center">
                   <Col md={3}>
                     <Image src={sampleImage} alt={item.name} fluid rounded />
                   </Col>
@@ -86,7 +86,7 @@ const BagScreen = ({ match, location }) => {
                       {item.seller}
                     </div>
                   </Col>
-                  <Col md={2} className="d-flex align-items-center">
+                  <Col md={2}>
                     <Form.Control
                       as="select"
                       value={item.qty}
@@ -103,7 +103,7 @@ const BagScreen = ({ match, location }) => {
                       ))}
                     </Form.Control>
                   </Col>
-                  <Col md={2} className="d-flex align-items-center">
+                  <Col md={2}>
                     <Button
                       type="button"
                       variant="light"
@@ -113,7 +113,7 @@ const BagScreen = ({ match, location }) => {
                     </Button>
                   </Col>
                 </Row>
-              </ListGroup.Item>
+              </Card>
             ))}
           </ListGroup>
         )}
@@ -136,7 +136,7 @@ const BagScreen = ({ match, location }) => {
         <Card className="mb-2">
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <div class="row">
+              <Row>
                 <div class="col-md-12 d-flex">
                   <strong className="mr-2">Ship to: </strong> {"Tom Hanks"}{" "}
                   <br />
@@ -146,7 +146,7 @@ const BagScreen = ({ match, location }) => {
                   <br />
                   {"L5L 5L4"}
                 </div>
-              </div>
+              </Row>
               <strong className="mr-2">Customer ID: </strong> 2956288910 <br />
             </ListGroup.Item>
           </ListGroup>
@@ -154,24 +154,34 @@ const BagScreen = ({ match, location }) => {
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>
-                {/* get total quantity */}
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-                items
-              </h2>
-              {/* get total price of all the items */}$
-              {cartItems
-                .reduce((acc, item) => acc + item.qty * item.price, 0)
-                .toFixed(2)}
+              <Row>
+                <div class="col-md-12 d-flex">
+                  <strong>Subtotal: </strong>
+                  <div class="ml-auto">
+                    CAD$
+                    {bagItems
+                      .reduce((acc, item) => acc + item.qty * item.price, 0)
+                      .toFixed(2)}
+                  </div>
+                </div>
+                <div class="col-md-12 d-flex">
+                  <strong>Shipping: </strong>
+                  <div class="ml-auto">CAD$00.00</div>
+                </div>
+                <div class="col-md-12 d-flex mt-2">
+                  <h4>Total: </h4>
+                  <div class="ml-auto">CAD$483.00</div>
+                </div>
+              </Row>
             </ListGroup.Item>
             <ListGroup.Item>
               <Button
                 type="button"
-                className="btn-block"
-                disabled={cartItems.length === 0}
+                className="btn d-flex mx-auto"
+                disabled={bagItems.length === 0}
                 // onClick={checkoutHandler}
               >
-                Proceed To Checkout
+                Pay with iPay
               </Button>
             </ListGroup.Item>
           </ListGroup>

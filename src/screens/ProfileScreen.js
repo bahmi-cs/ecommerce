@@ -20,7 +20,6 @@ const ProfileScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [show, setShow] = useState(false);
 
   //   console.log("user", user);
 
@@ -75,45 +74,12 @@ const ProfileScreen = () => {
 
   return (
     <Container>
-      <div
-        aria-live="polite"
-        aria-atomic="true"
-        style={{
-          position: "relative",
-          minHeight: "100px",
-        }}
-      >
-        <Toast
-          onClose={() => setShow(false)}
-          show={show}
-          delay={4000}
-          autohide
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-          }}
-        >
-          <Toast.Header className="success bg-success">
-            <img
-              src="holder.js/20x20?text=%20"
-              className="rounded mr-2"
-              alt=""
-            />
-            <strong className="mr-auto text-white">Success</strong>
-            <small className="text-white">Just now</small>
-          </Toast.Header>
-          <Toast.Body>Account created successfully!</Toast.Body>
-        </Toast>
-      </div>
-      <Button onClick={() => setShow(true)}>Show Toast</Button>
       <Row className="justify-content-md-center">
         <Col md={6}>
           <h3 className="mb-3">User Profile</h3>
           {message && <Message variant="info">{message}</Message>}
           {error && <Message>{error}</Message>}
           {/* {errorProfile && <Message variant="danger">{errorProfile}</Message>} */}
-          {/* {success && <Message variant="success">Profile Updated</Message>} */}
           {loading ? (
             <Loader />
           ) : (
