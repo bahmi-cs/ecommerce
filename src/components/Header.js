@@ -22,6 +22,10 @@ const Header = () => {
                 {/* <i className="fas fa-home" />  */}
                 Home
               </Nav.Link>
+              <Nav.Link href="/itemscreen">
+                {/* <i className="fas fa-home" />  */}
+                Item Details
+              </Nav.Link>
               {user ? (
                 <Nav.Link href="/">
                   {/* <i className="fas fa-home" />  */}
@@ -31,10 +35,20 @@ const Header = () => {
                 ""
               )}
               {user ? (
-                <Nav.Link href="/">
-                  {/* <i className="fas fa-home" />  */}
-                  Orders
-                </Nav.Link>
+                <>
+                  <Nav.Link href="/">
+                    {/* <i className="fas fa-home" />  */}
+                    Orders
+                  </Nav.Link>
+                  <Nav.Link href="/addstore">
+                    {/* <i className="fas fa-home" />  */}
+                    Add Store
+                  </Nav.Link>
+                  <Nav.Link href="/additem">
+                    {/* <i className="fas fa-home" />  */}
+                    Add Item
+                  </Nav.Link>
+                </>
               ) : (
                 ""
               )}

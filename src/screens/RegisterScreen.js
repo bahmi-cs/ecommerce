@@ -98,7 +98,7 @@ const RegisterScreen = () => {
                 <Form.Group controlId="fullName">
                   <Form.Label>Full Name</Form.Label>
                   <Form.Control
-                    type="fullName"
+                    type="text"
                     placeholder="Enter Full Name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
@@ -123,7 +123,7 @@ const RegisterScreen = () => {
                 <Form.Group controlId="mobileNumber">
                   <Form.Label>Mobile Number</Form.Label>
                   <Form.Control
-                    type="mobileNumber"
+                    type="text"
                     placeholder="Enter Mobile Number"
                     value={mobileNumber}
                     onChange={(e) => setMobileNumber(e.target.value)}
@@ -169,7 +169,7 @@ const RegisterScreen = () => {
                 <Form.Group controlId="postalCode">
                   <Form.Label>Postal Code</Form.Label>
                   <Form.Control
-                    type="postalCode"
+                    type="text"
                     placeholder="Enter Postal Code"
                     value={postalCode}
                     onChange={(e) => setPostalCode(e.target.value)}
