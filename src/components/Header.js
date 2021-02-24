@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <Navbar.Brand href="/">Shopping Central</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -22,32 +22,16 @@ const Header = () => {
                 {/* <i className="fas fa-home" />  */}
                 Home
               </Nav.Link>
-              <Nav.Link href="/itemscreen">
-                {/* <i className="fas fa-home" />  */}
-                Item Details
-              </Nav.Link>
-              {user ? (
-                <Nav.Link href="/">
-                  {/* <i className="fas fa-home" />  */}
-                  Updates
-                </Nav.Link>
-              ) : (
-                ""
-              )}
+              {/* <Nav.Link href="/itemscreen">Item Details</Nav.Link> */}
+              {user ? <Nav.Link href="/updates">Updates</Nav.Link> : ""}
               {user ? (
                 <>
                   <Nav.Link href="/">
                     {/* <i className="fas fa-home" />  */}
                     Orders
                   </Nav.Link>
-                  <Nav.Link href="/addstore">
-                    {/* <i className="fas fa-home" />  */}
-                    Add Store
-                  </Nav.Link>
-                  <Nav.Link href="/additem">
-                    {/* <i className="fas fa-home" />  */}
-                    Add Item
-                  </Nav.Link>
+                  {/* <Nav.Link href="/addstore">Add Store</Nav.Link>
+                  <Nav.Link href="/additem">Add Item</Nav.Link> */}
                 </>
               ) : (
                 ""
