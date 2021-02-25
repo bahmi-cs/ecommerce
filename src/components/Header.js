@@ -26,7 +26,7 @@ const Header = () => {
               {user ? <Nav.Link href="/updates">Updates</Nav.Link> : ""}
               {user ? (
                 <>
-                  <Nav.Link href="/">
+                  <Nav.Link href="/orders">
                     {/* <i className="fas fa-home" />  */}
                     Orders
                   </Nav.Link>

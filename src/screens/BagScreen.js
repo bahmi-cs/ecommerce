@@ -118,8 +118,8 @@ const BagScreen = ({ match, location }) => {
           </ListGroup>
         )}
       </Col>
-      <Col md={4}>
-        <Card className="mb-2">
+      <Col md={4} className="mt-3">
+        <Card className="mb-2 mt-5">
           <ListGroup variant="flush">
             <ListGroup.Item>
               {/* <h2></h2>
