@@ -9,3 +9,4 @@ export { default as AddItemScreen } from "./AddItemScreen";
 export { default as AddStoreScreen } from "./AddStoreScreen";
 export { default as ItemScreen } from "./ItemScreen";
 export { default as OrderScreen } from "./OrderScreen";
+export { default as StoreScreen } from "./StoreScreen";

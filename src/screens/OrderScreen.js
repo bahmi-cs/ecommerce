@@ -6,8 +6,8 @@ import sampleImage from "../assets/img/airpods.jpg";
 
 const OrderScreen = ({ match, location }) => {
   const [cartItems, setCartItems] = useState([]);
-  const productId = match.params.id;
-  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+  // const productId = match.params.id;
+  // const qty = location.search ? Number(location.search.split("=")[1]) : 1;
 
   const orderItems = [
     {
