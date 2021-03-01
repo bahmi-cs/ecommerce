@@ -5,7 +5,7 @@ import sampleImage from "../assets/img/airpods.jpg";
 
 const Product = ({ product }) => {
   return (
-    <Card className="my-3 p-2 rounded">
+    <Card className="my-3 p-3 rounded">
       <Link to={`/product/${product._id}`}>
         <Card.Img src={sampleImage} valiant="top" />
       </Link>
