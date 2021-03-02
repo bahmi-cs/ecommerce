@@ -43,19 +43,10 @@ function App() {
             >
               <RegisterScreen />
             </IsUserRedirect>
-            {/* <IsUserRedirect
-              user={user}
-              loggedInPath={ROUTES.HOME}
-              path={ROUTES.HOME}
-              exact
-            >
-              <HomeScreen />
-            </IsUserRedirect> */}
-
             <Route path="/bag/:id?" component={BagScreen} exact />
             {/* <Route path="/orders" component={OrderScreen} exact /> */}
-            <Route path="/itemscreen" component={ItemScreen} exact />
-            <Route path="/store" component={StoreScreen} exact />
+            <Route path="/product/:id" component={ItemScreen} exact />
+            <Route path="/store/:id?" component={StoreScreen} exact />
             {/* <Route path="/updates" component={UpdatesScreen} exact /> */}
             <Route path="/addstore" component={AddStoreScreen} exact />
             <Route path="/additem" component={AddItemScreen} exact />

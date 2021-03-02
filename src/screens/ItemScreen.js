@@ -29,7 +29,7 @@ const ItemScreen = ({ history, match }) => {
   //   }, [dispatch, match, product]);
 
   const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${qty}`);
+    history.push(`/bag/${match.params.id}?qty=${qty}`);
   };
 
   return (

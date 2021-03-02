@@ -69,25 +69,25 @@ const HomeScreen = () => {
               </strong>
             </div>
             <Row>
-              {storeItems.map((product) => (
-                <Col key={product._id} sm={12} md={6} lg={2} xl={2}>
+              {storeItems.map((store) => (
+                <Col key={store._id} sm={12} md={6} lg={2} xl={2}>
                   <Card className="my-3 p-1 rounded text-center">
-                    <Link to={`/product/${product._id}`}>
+                    <Link to={`/store/${store.storeId}`}>
                       <Card.Img src={sampleImage} valiant="top" />
                     </Link>
 
                     <Card.Body>
-                      <Link to={`/product/${product._id}`}>
+                      <Link to={`/store/${store.storeId}`}>
                         <Card.Text as="div">
-                          <strong>{product.storeName}</strong>
+                          <strong>{store.storeName}</strong>
                         </Card.Text>
                       </Link>
 
                       {/* <Card.Text as="div"></Card.Text> */}
 
-                      <Card.Text as="h6" className="mt-2">
-                        ID: {product.storeId}
-                      </Card.Text>
+                      {/* <Card.Text as="h6" className="mt-2">
+                        ID: {store.storeId}
+                      </Card.Text> */}
                     </Card.Body>
                   </Card>
                 </Col>

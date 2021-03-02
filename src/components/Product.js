@@ -5,13 +5,13 @@ import sampleImage from "../assets/img/airpods.jpg";
 
 const Product = ({ product }) => {
   return (
-    <Card className="my-3 p-3 rounded">
-      <Link to={`/product/${product._id}`}>
+    <Card className="my-3 p-2 rounded">
+      <Link to={`/product/${product.itemId}`}>
         <Card.Img src={sampleImage} valiant="top" />
       </Link>
 
       <Card.Body>
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/product/${product.itemId}`}>
           <Card.Text as="div">
             <strong>{product.title}</strong>
           </Card.Text>
