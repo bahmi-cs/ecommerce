@@ -9,13 +9,63 @@ import {
   Button,
   Card,
 } from "react-bootstrap";
-import { Message } from "../components";
+import { Message, Loader } from "../components";
 import sampleImage from "../assets/img/airpods.jpg";
+import {
+  PayPalButtons,
+  usePayPalScriptReducer,
+  FUNDING,
+} from "@paypal/react-paypal-js";
+import { useHistory } from "react-router-dom";
 
 const BagScreen = ({ match, location }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [{ isPending }] = usePayPalScriptReducer();
+  const [amount, setAmount] = useState(5);
+  const [orderID, setOrderID] = useState(false);
   const productId = match.params.id;
   const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+  const history = useHistory();
+
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: amount,
+            },
+          },
+        ],
+      })
+      .then((orderID) => {
+        setOrderID(orderID);
+        return orderID;
+      });
+  };
+
+  const onSuccess = (payment) => {
+    payment.console // Congratulation, it came here means everything's fine!
+      .log("The payment was succeeded!", payment);
+    this.props.clearCart();
+    history.push("/");
+    // You can bind the "payment" object's value to your state or props or whatever here, please see below for sample returned data
+  };
+
+  const onError = (err) => {
+    // The main Paypal's script cannot be loaded or somethings block the loading of that script!
+    console.log("Error!", err);
+    // Because the Paypal's main script is loaded asynchronously from "https://www.paypalobjects.com/api/checkout.js"
+    // => sometimes it may take about 0.5 second for everything to get set, or for the button to appear
+  };
+
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(function (details) {
+      alert("Transaction completed by " + details.payer.name.given_name + "!");
+      // clear cart from localstore
+      history.push("/");
+    });
+  };
 
   const bagItems = [
     {
@@ -57,6 +107,10 @@ const BagScreen = ({ match, location }) => {
   //   const checkoutHandler = () => {
   //     history.push("/login?redirect=shipping");
   //   };
+
+  const fundingSource = {
+    paypal: "paypal.FUNDING.PAYPAL",
+  };
 
   return (
     <Row>
@@ -175,14 +229,25 @@ const BagScreen = ({ match, location }) => {
               </Row>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button
+              {isPending ? (
+                <Loader />
+              ) : (
+                <PayPalButtons
+                  style={{ layout: "horizontal" }}
+                  createOrder={createOrder}
+                  fundingSource={FUNDING.PAYPAL}
+                  onApprove={onApprove}
+                />
+              )}
+
+              {/* <Button
                 type="button"
                 className="btn d-flex mx-auto"
                 disabled={bagItems.length === 0}
                 // onClick={checkoutHandler}
               >
                 Pay with iPay
-              </Button>
+              </Button> */}
             </ListGroup.Item>
           </ListGroup>
         </Card>

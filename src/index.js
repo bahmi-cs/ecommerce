@@ -7,11 +7,22 @@ import App from "./App";
 import { firebase } from "./lib/firebase";
 import { FirebaseContext } from "./context/firebase";
 import reportWebVitals from "./reportWebVitals";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
+const initialOptions = {
+  "client-id":
+    "ATcmz0H5b9aNxGw2byWVII3-d3cn81_r4R1kxTrSiCb0-RNnZ-_o-12zc-Z9_EnsSn2Xw80weLVDyM2V",
+  currency: "CAD",
+  intent: "capture",
+  // "data-client-token": "abc123xyz==",
+};
 
 ReactDOM.render(
   <>
     <FirebaseContext.Provider value={{ firebase }}>
-      <App />
+      <PayPalScriptProvider options={initialOptions}>
+        <App />
+      </PayPalScriptProvider>
     </FirebaseContext.Provider>
   </>,
   document.getElementById("root")
