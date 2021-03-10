@@ -4,6 +4,7 @@ import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { FirebaseContext } from "../context/firebase";
 import { Message } from "../components";
 import * as ROUTES from "../constants/routes";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 
 const RegisterScreen = () => {
   const history = useHistory();
@@ -109,12 +110,18 @@ const RegisterScreen = () => {
               <Col xs={12} md={3}>
                 <Form.Group controlId="country">
                   <Form.Label>Country</Form.Label>
-                  <Form.Control
+                  <CountryDropdown
+                    value={country}
+                    class="form-control"
+                    onChange={(val) => setCountry(val)}
+                    priorityOptions={["CA", "US", "GB"]}
+                  />
+                  {/* <Form.Control
                     type="text"
                     placeholder="Enter Country"
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                  ></Form.Control>
+                  ></Form.Control> */}
                 </Form.Group>
               </Col>
             </Form.Row>
@@ -133,12 +140,18 @@ const RegisterScreen = () => {
               <Col xs={12} md={3}>
                 <Form.Group controlId="province">
                   <Form.Label>Province</Form.Label>
-                  <Form.Control
+                  <RegionDropdown
+                    country={country}
+                    class="form-control"
+                    value={province}
+                    onChange={(val) => setProvince(val)}
+                  />
+                  {/* <Form.Control
                     type="text"
                     placeholder="Enter Province"
                     value={province}
                     onChange={(e) => setProvince(e.target.value)}
-                  ></Form.Control>
+                  ></Form.Control> */}
                 </Form.Group>
               </Col>
             </Form.Row>

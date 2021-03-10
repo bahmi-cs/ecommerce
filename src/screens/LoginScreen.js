@@ -60,7 +60,7 @@ const LoginScreen = () => {
 
         <Row className="pb-1">
           <Col>
-            <Link to={ROUTES.SIGN_UP}> Forgot password?</Link>
+            <Link to={"#"}> Forgot password?</Link>
           </Col>
         </Row>
         <Button disabled={isInvalid} type="submit" variant="primary">
