@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Row,
   Col,
@@ -16,16 +15,55 @@ import {
   usePayPalScriptReducer,
   FUNDING,
 } from "@paypal/react-paypal-js";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useAuthListener } from "../hooks";
+import { FirebaseContext } from "../context/firebase";
+
+const bagItems = [
+  {
+    date: "Wednesday Feb 24, 2021",
+    name: "Airpods Wireless Bluetooth Headphones",
+    itemId: "662287-27122",
+    price: 161,
+    seller: "Hudson Store",
+    qty: 1,
+    countInStock: 10,
+  },
+  // {
+  //   date: "Wednesday Feb 24, 2021",
+  //   name: "Airpods Wireless Bluetooth Headphones",
+  //   itemId: "662287-27122",
+  //   price: 161,
+  //   seller: "Hudson Store",
+  //   qty: 1,
+  //   countInStock: 10,
+  // },
+  // {
+  //   date: "Wednesday Feb 24, 2021",
+  //   name: "Airpods Wireless Bluetooth Headphones",
+  //   itemId: "662287-27122",
+  //   price: 161,
+  //   seller: "Hudson Store",
+  //   qty: 1,
+  //   countInStock: 10,
+  // },
+];
 
 const BagScreen = ({ match, location }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const history = useHistory();
+  const { firebase } = useContext(FirebaseContext);
+  const db = firebase.firestore();
+  const { user } = useAuthListener();
+
+  const [cartItems, setCartItems] = useState(bagItems || []);
+
   const [{ isPending }] = usePayPalScriptReducer();
   const [amount, setAmount] = useState(5);
   const [orderID, setOrderID] = useState(false);
   const productId = match.params.id;
   const qty = location.search ? Number(location.search.split("=")[1]) : 1;
-  const history = useHistory();
+
+  let localCart = localStorage.getItem("cart");
 
   const createOrder = (data, actions) => {
     return actions.order
@@ -67,55 +105,102 @@ const BagScreen = ({ match, location }) => {
     });
   };
 
-  const bagItems = [
-    {
-      date: "Wednesday Feb 24, 2021",
-      name: "Airpods Wireless Bluetooth Headphones",
-      price: 161,
-      seller: "Hudson Store",
-      qty: 1,
-      countInStock: 10,
-    },
-    {
-      date: "Wednesday Feb 24, 2021",
-      name: "Airpods Wireless Bluetooth Headphones",
-      price: 161,
-      seller: "Hudson Store",
-      qty: 1,
-      countInStock: 10,
-    },
-    {
-      date: "Wednesday Feb 24, 2021",
-      name: "Airpods Wireless Bluetooth Headphones",
-      price: 161,
-      seller: "Hudson Store",
-      qty: 1,
-      countInStock: 10,
-    },
-  ];
+  const getProduct = async () => {
+    const userRef = db.collection("items").doc(user.uid);
+    const doc = await userRef.get();
+    if (!doc.exists) {
+      console.log("No such document!");
+    } else {
+      const product = doc.data();
 
-  //   useEffect(() => {
-  //     if (productId) {
-  //       dispatch(addToCart(productId, qty));
-  //     }
-  //   }, [dispatch, productId, qty]);
-
-  //   const removeItemHandler = (id) => {
-  //     dispatch(removeFromCart(id));
-  //   };
-
-  //   const checkoutHandler = () => {
-  //     history.push("/login?redirect=shipping");
-  //   };
-
-  const fundingSource = {
-    paypal: "paypal.FUNDING.PAYPAL",
+      console.log("Document data:", doc.data());
+    }
   };
+
+  const addToCart = (item, qty) => {
+    let cartCopy = [...cartItems];
+    let existingItem = cartCopy.find(
+      (cartItem) => cartItem.itemId == productId
+    );
+
+    if (existingItem) {
+      existingItem.quantity += qty; //update item
+    } else {
+      //if item doesn't exist, simply add it
+      cartCopy.push(item);
+    }
+  };
+
+  const removeItemHandler = (id) => {
+    let cartCopy = [...cartItems];
+    cartCopy = cartCopy.filter((item) => item.itemId != id);
+    setCartItems(cartCopy);
+
+    let cartString = JSON.stringify(cartCopy);
+    localStorage.setItem("cart", cartString);
+  };
+
+  useEffect(() => {
+    localCart = JSON.parse(localCart);
+
+    if (localCart) setCartItems(localCart);
+
+    //make call to firestore and get details of the itm with the id
+
+    // if (productId) {
+    //   // addToCart(productId, qty);
+    // }
+  }, []);
+
+  // const [cart, setCart] = useState([]);
+  // const cartTotal = cart.reduce((total, { price = 0 }) => total + price, 0);
+
+  // const addToCart = (item) => setCart((currentCart) => [...currentCart, item]);
+
+  // const removeFromCart = (item) => {
+  //   setCart((currentCart) => {
+  //     const indexOfItemToRemove = currentCart.findIndex(
+  //       (cartItem) => cartItem.id === item.id
+  //     );
+
+  //     if (indexOfItemToRemove === -1) {
+  //       return currentCart;
+  //     }
+
+  //     return [
+  //       ...currentCart.slice(0, indexOfItemToRemove),
+  //       ...currentCart.slice(indexOfItemToRemove + 1),
+  //     ];
+  //   });
+  // };
+
+  // const amountOfItems = (id) => cart.filter((item) => item.id === id).length;
+
+  // const listItemsToBuy = () =>
+  //   bagItems.map((item) => (
+  //     <div key={item.id}>
+  //       {`${item.name}: $${item.price}`}
+  //       <button type="submit" onClick={() => addToCart(item)}>
+  //         Add
+  //       </button>
+  //     </div>
+  //   ));
+
+  // const listItemsInCart = () =>
+  //   bagItems.map((item) => (
+  //     <div key={item.id}>
+  //       ({amountOfItems(item.id)} x ${item.price}) {`${item.name}`}
+  //       <button type="submit" onClick={() => removeFromCart(item)}>
+  //         Remove
+  //       </button>
+  //     </div>
+  //   ));
 
   return (
     <Row>
       <Col md={8}>
         <h1>Bag</h1>
+
         {bagItems.length === 0 ? (
           <Message variant="info">
             Your cart is empty <Link to="/">Go Back</Link>
@@ -130,7 +215,7 @@ const BagScreen = ({ match, location }) => {
                   </Col>
                   <Col md={5}>
                     <div className="mb-1">{item.date}</div>
-                    <Link to={`/product/${item.name}`}>{item.name}</Link>
+                    <Link to={`/product/${item.itemId}`}>{item.name}</Link>
                     <br />
                     <div className="mt-3">
                       <strong>Price: </strong>CAD${item.price}
@@ -140,6 +225,7 @@ const BagScreen = ({ match, location }) => {
                       {item.seller}
                     </div>
                   </Col>
+
                   <Col md={2}>
                     <Form.Control
                       as="select"
@@ -161,7 +247,7 @@ const BagScreen = ({ match, location }) => {
                     <Button
                       type="button"
                       variant="light"
-                      //   onClick={() => removeItemHandler(item.product)}
+                      onClick={() => removeItemHandler(item.product)}
                     >
                       <i className="fas fa-trash"></i>
                     </Button>
