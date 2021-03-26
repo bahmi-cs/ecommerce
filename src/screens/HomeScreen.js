@@ -40,11 +40,6 @@ const HomeScreen = () => {
       storeName: "Hudson Store",
       storeLocation: "Mississauga, ON",
     },
-    {
-      storeId: "298910",
-      storeName: "Hudson Store",
-      storeLocation: "Mississauga, ON",
-    },
   ];
 
   //   useEffect(() => {
