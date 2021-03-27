@@ -34,8 +34,8 @@ const ItemScreen = ({ match }) => {
     itemId: "662287-27122",
     barcode: "66228727122",
     pictures: "img",
-    price: 40.0,
-    discountedPrice: 35.0,
+    price: 89.9,
+    discountedPrice: 75.5,
     description:
       "Bluetooth technology lets you connect it with compatible devices wirelessly High-quality AAC audio offers immersive listening experience Built-in microphone allows you to take calls while working",
     category: "Kids",
@@ -105,8 +105,8 @@ const ItemScreen = ({ match }) => {
   };
 
   useEffect(() => {
-    getProduct();
-    setLoading(false);
+    // getProduct();
+    // setLoading(false);
   }, []);
 
   return (
