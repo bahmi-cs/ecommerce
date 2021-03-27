@@ -23,7 +23,7 @@ const ItemScreen = ({ match }) => {
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
   const [message, setMessage] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
 
   const product = {
