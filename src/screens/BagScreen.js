@@ -8,8 +8,6 @@ import {
   Button,
   Card,
 } from "react-bootstrap";
-import { Message, Loader } from "../components";
-import sampleImage from "../assets/img/airpods.jpg";
 import {
   PayPalButtons,
   usePayPalScriptReducer,
@@ -18,6 +16,8 @@ import {
 import { Link, useHistory } from "react-router-dom";
 import { useAuthListener } from "../hooks";
 import { FirebaseContext } from "../context/firebase";
+import { Message, Loader } from "../components";
+import sampleImage from "../assets/img/airpods.jpg";
 
 const bagItems = [
   {
@@ -29,25 +29,23 @@ const bagItems = [
     qty: 1,
     countInStock: 10,
   },
-  // {
-  //   date: "Wednesday Feb 24, 2021",
-  //   name: "Airpods Wireless Bluetooth Headphones",
-  //   itemId: "662287-27122",
-  //   price: 161,
-  //   seller: "Hudson Store",
-  //   qty: 1,
-  //   countInStock: 10,
-  // },
-  // {
-  //   date: "Wednesday Feb 24, 2021",
-  //   name: "Airpods Wireless Bluetooth Headphones",
-  //   itemId: "662287-27122",
-  //   price: 161,
-  //   seller: "Hudson Store",
-  //   qty: 1,
-  //   countInStock: 10,
-  // },
+  {
+    date: "Wednesday Feb 24, 2021",
+    name: "iPhone 11 Pro 256GB Memory",
+    itemId: "662287-271225",
+    price: 161,
+    seller: "Hudson Store",
+    qty: 1,
+    countInStock: 10,
+  },
 ];
+
+let today = new Date();
+let dd = String(today.getDate()).padStart(2, "0");
+let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+let yyyy = today.getFullYear();
+
+today = mm + "/" + dd + "/" + yyyy;
 
 const BagScreen = ({ match, location }) => {
   const history = useHistory();
@@ -55,13 +53,15 @@ const BagScreen = ({ match, location }) => {
   const db = firebase.firestore();
   const { user } = useAuthListener();
 
-  const [cartItems, setCartItems] = useState(bagItems || []);
+  const [cartItems, setCartItems] = useState([]);
 
   const [{ isPending }] = usePayPalScriptReducer();
   const [amount, setAmount] = useState(5);
   const [orderID, setOrderID] = useState(false);
   const productId = match.params.id;
-  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+  // const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+
+  // console.log(productId, qty);
 
   let localCart = localStorage.getItem("cart");
 
@@ -105,31 +105,65 @@ const BagScreen = ({ match, location }) => {
     });
   };
 
-  const getProduct = async () => {
-    const userRef = db.collection("items").doc(user.uid);
-    const doc = await userRef.get();
-    if (!doc.exists) {
-      console.log("No such document!");
-    } else {
-      const product = doc.data();
+  // const getProduct = async () => {
+  //   const userRef = db.collection("items").doc(user.uid);
+  //   const doc = await userRef.get();
+  //   if (!doc.exists) {
+  //     console.log("No such document!");
+  //   } else {
+  //     const product = doc.data();
 
-      console.log("Document data:", doc.data());
-    }
-  };
+  //     console.log("Document data:", doc.data());
+  //   }
+  // };
 
-  const addToCart = (item, qty) => {
-    let cartCopy = [...cartItems];
-    let existingItem = cartCopy.find(
-      (cartItem) => cartItem.itemId == productId
-    );
+  //checks if an item exists
+  // const item = bagItems.some((item) => item.itemId === productId);
 
-    if (existingItem) {
-      existingItem.quantity += qty; //update item
-    } else {
-      //if item doesn't exist, simply add it
-      cartCopy.push(item);
-    }
-  };
+  // const addToCart = (productId) => {
+  //   let cartCopy = [...cartItems];
+
+  //   const item = bagItems.find((item) => item.itemId === productId);
+
+  //   let existingItem = cartCopy.find(
+  //     (cartItem) => cartItem.itemId === productId
+  //   );
+
+  //   if (existingItem) {
+  //     existingItem.qty += qty; //update item
+  //   } else {
+  //     //if item doesn't exist, simply add it
+  //     cartCopy.push(item);
+  //   }
+
+  //   setCartItems(cartCopy);
+
+  //   let stringCart = JSON.stringify(cartCopy);
+  //   localStorage.setItem("cart", stringCart);
+  // };
+
+  // const updateItem = (productId, amount) => {
+  //   let cartCopy = [...cartItems];
+
+  //   // const item = bagItems.find((item) => item.itemId === product.itemId);
+
+  //   let existingItem = cartCopy.find(
+  //     (cartItem) => cartItem.itemId === product.itemId
+  //   );
+
+  //   if (existingItem) {
+  //     existingItem.quantity += qty; //update item
+  //   } else {
+  //     //if item doesn't exist, simply add it
+  //     product.quantity = Number(qty);
+  //     cartCopy.push(product);
+  //   }
+
+  //   setCartItems(cartCopy);
+
+  //   let stringCart = JSON.stringify(cartCopy);
+  //   localStorage.setItem("cart", stringCart);
+  // };
 
   const removeItemHandler = (id) => {
     let cartCopy = [...cartItems];
@@ -141,113 +175,70 @@ const BagScreen = ({ match, location }) => {
   };
 
   useEffect(() => {
+    //make call to firestore and get details of the item with the id
+
     localCart = JSON.parse(localCart);
 
-    if (localCart) setCartItems(localCart);
-
-    //make call to firestore and get details of the itm with the id
+    if (localCart) {
+      setCartItems(localCart);
+    }
 
     // if (productId) {
-    //   // addToCart(productId, qty);
+    //   addToCart(productId, qty);
     // }
-  }, []);
-
-  // const [cart, setCart] = useState([]);
-  // const cartTotal = cart.reduce((total, { price = 0 }) => total + price, 0);
-
-  // const addToCart = (item) => setCart((currentCart) => [...currentCart, item]);
-
-  // const removeFromCart = (item) => {
-  //   setCart((currentCart) => {
-  //     const indexOfItemToRemove = currentCart.findIndex(
-  //       (cartItem) => cartItem.id === item.id
-  //     );
-
-  //     if (indexOfItemToRemove === -1) {
-  //       return currentCart;
-  //     }
-
-  //     return [
-  //       ...currentCart.slice(0, indexOfItemToRemove),
-  //       ...currentCart.slice(indexOfItemToRemove + 1),
-  //     ];
-  //   });
-  // };
-
-  // const amountOfItems = (id) => cart.filter((item) => item.id === id).length;
-
-  // const listItemsToBuy = () =>
-  //   bagItems.map((item) => (
-  //     <div key={item.id}>
-  //       {`${item.name}: $${item.price}`}
-  //       <button type="submit" onClick={() => addToCart(item)}>
-  //         Add
-  //       </button>
-  //     </div>
-  //   ));
-
-  // const listItemsInCart = () =>
-  //   bagItems.map((item) => (
-  //     <div key={item.id}>
-  //       ({amountOfItems(item.id)} x ${item.price}) {`${item.name}`}
-  //       <button type="submit" onClick={() => removeFromCart(item)}>
-  //         Remove
-  //       </button>
-  //     </div>
-  //   ));
+  }, [localCart]);
 
   return (
     <Row>
       <Col md={8}>
         <h1>Bag</h1>
 
-        {bagItems.length === 0 ? (
+        {cartItems.length === 0 ? (
           <Message variant="info">
             Your cart is empty <Link to="/">Go Back</Link>
           </Message>
         ) : (
           <ListGroup variant="flush">
-            {bagItems.map((item) => (
+            {cartItems.map((item) => (
               <Card className="mb-3" key={item.id}>
                 <Row className="d-flex align-items-center">
                   <Col md={3}>
-                    <Image src={sampleImage} alt={item.name} fluid rounded />
+                    <Image src={sampleImage} alt={item.title} fluid rounded />
                   </Col>
                   <Col md={5}>
-                    <div className="mb-1">{item.date}</div>
-                    <Link to={`/product/${item.itemId}`}>{item.name}</Link>
+                    <div className="mb-1">{today}</div>
+                    <Link to={`/product/${item.itemId}`}>{item.title}</Link>
                     <br />
                     <div className="mt-3">
                       <strong>Price: </strong>CAD${item.price}
                     </div>
                     <div>
                       <strong>Seller: </strong>
-                      {item.seller}
+                      {item.storeName}
                     </div>
                   </Col>
 
                   <Col md={2}>
                     <Form.Control
                       as="select"
-                      value={item.qty}
+                      value={item.quantity}
                       onChange={(e) => {
-                        // dispatch(
-                        //   addToCart(item.product, Number(e.target.value))
-                        // );
+                        // updateItem(item.itemId, Number(e.target.value));
                       }}
                     >
-                      {[...Array(item.countInStock).keys()].map((x) => (
+                      {<option>{item.quantity}</option>}
+                      {/* {[...Array(item.quantity).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
                           {x + 1}
                         </option>
-                      ))}
+                      ))} */}
                     </Form.Control>
                   </Col>
                   <Col md={2}>
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => removeItemHandler(item.product)}
+                      onClick={() => removeItemHandler(item.itemId)}
                     >
                       <i className="fas fa-trash"></i>
                     </Button>
@@ -264,10 +255,10 @@ const BagScreen = ({ match, location }) => {
             <ListGroup.Item>
               {/* <h2></h2>
               <h5 className="float-right"></h5> */}
-              <div class="row">
-                <div class="col-md-12 d-flex">
+              <div className="row">
+                <div className="col-md-12 d-flex">
                   <strong>Shipping: </strong>
-                  <div class="ml-auto">Same day</div>
+                  <div className="ml-auto">Same day</div>
                 </div>
               </div>
             </ListGroup.Item>
@@ -277,7 +268,7 @@ const BagScreen = ({ match, location }) => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <Row>
-                <div class="col-md-12 d-flex">
+                <div className="col-md-12 d-flex">
                   <strong className="mr-2">Ship to: </strong> {"Tom Hanks"}{" "}
                   <br />
                   {"3146 Orleans Rd"}
@@ -295,22 +286,33 @@ const BagScreen = ({ match, location }) => {
           <ListGroup variant="flush">
             <ListGroup.Item>
               <Row>
-                <div class="col-md-12 d-flex">
+                <div className="col-md-12 d-flex">
                   <strong>Subtotal: </strong>
-                  <div class="ml-auto">
+                  <div className="ml-auto">
                     CAD$
-                    {bagItems
-                      .reduce((acc, item) => acc + item.qty * item.price, 0)
-                      .toFixed(2)}
+                    {Number(
+                      cartItems.reduce(
+                        (acc, item) => acc + item.quantity * item.price,
+                        0
+                      )
+                    ).toFixed(2)}
                   </div>
                 </div>
-                <div class="col-md-12 d-flex">
+                <div className="col-md-12 d-flex">
                   <strong>Shipping: </strong>
-                  <div class="ml-auto">CAD$00.00</div>
+                  <div className="ml-auto">CAD$00.00</div>
                 </div>
-                <div class="col-md-12 d-flex mt-2">
+                <div className="col-md-12 d-flex mt-2">
                   <h4>Total: </h4>
-                  <div class="ml-auto">CAD$483.00</div>
+                  <div className="ml-auto">
+                    CAD$
+                    {Number(
+                      cartItems.reduce(
+                        (acc, item) => acc + item.quantity * item.price,
+                        0
+                      ) + 0
+                    ).toFixed(2)}
+                  </div>
                 </div>
               </Row>
             </ListGroup.Item>
@@ -325,15 +327,6 @@ const BagScreen = ({ match, location }) => {
                   onApprove={onApprove}
                 />
               )}
-
-              {/* <Button
-                type="button"
-                className="btn d-flex mx-auto"
-                disabled={bagItems.length === 0}
-                // onClick={checkoutHandler}
-              >
-                Pay with iPay
-              </Button> */}
             </ListGroup.Item>
           </ListGroup>
         </Card>

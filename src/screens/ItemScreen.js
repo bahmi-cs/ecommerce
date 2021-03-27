@@ -24,6 +24,7 @@ const ItemScreen = ({ match }) => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cartItems, setCartItems] = useState([]);
 
   const product = {
     storeId: "298910",
@@ -51,36 +52,62 @@ const ItemScreen = ({ match }) => {
     } else {
       const product = doc.data();
 
-      // {
-      //   title,
-      //   itemId,
-      //   barcode,
-      //   pictures,
-      //   price,
-      //   discountedPrice,
-      //   description,
-      //   category,
-      //   quantity,
-      //   condition,
-      //   status,
-      // }
-
-      // setFullName(fullName);
-      // setMobileNumber(mobileNumber);
-      // setEmail(email);
-      // setAddress(address);
       console.log("Document data:", doc.data());
     }
+  };
+
+  // const addToCart = (productId) => {
+  //   let cartCopy = [...cartItems];
+
+  //   const item = bagItems.find((item) => item.itemId === productId);
+
+  //   let existingItem = cartCopy.find(
+  //     (cartItem) => cartItem.itemId === productId
+  //   );
+
+  //   if (existingItem) {
+  //     existingItem.qty += qty; //update item
+  //   } else {
+  //     //if item doesn't exist, simply add it
+  //     cartCopy.push(item);
+  //   }
+
+  //   setCartItems(cartCopy);
+
+  //   let stringCart = JSON.stringify(cartCopy);
+  //   localStorage.setItem("cart", stringCart);
+  // };
+
+  const addToCartHandler = () => {
+    let cartCopy = [...cartItems];
+
+    // const item = bagItems.find((item) => item.itemId === product.itemId);
+
+    let existingItem = cartCopy.find(
+      (cartItem) => cartItem.itemId === product.itemId
+    );
+
+    if (existingItem) {
+      existingItem.quantity += qty; //update item
+    } else {
+      //if item doesn't exist, simply add it
+      product.quantity = Number(qty);
+      cartCopy.push(product);
+    }
+
+    setCartItems(cartCopy);
+
+    let stringCart = JSON.stringify(cartCopy);
+    localStorage.setItem("cart", stringCart);
+
+    history.push(`/bag`);
+    // history.push(`/bag/${match.params.id}?qty=${qty}`);
   };
 
   useEffect(() => {
     getProduct();
     setLoading(false);
   }, []);
-
-  const addToCartHandler = () => {
-    history.push(`/bag/${match.params.id}?qty=${qty}`);
-  };
 
   return (
     <>

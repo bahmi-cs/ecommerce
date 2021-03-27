@@ -79,7 +79,7 @@ typings/
 .next
 
 # React.js build output
-.next
+build/
 
 # Nuxt.js build / generate output
 .nuxt
