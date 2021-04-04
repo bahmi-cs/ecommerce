@@ -19,27 +19,6 @@ import { FirebaseContext } from "../context/firebase";
 import { Message, Loader } from "../components";
 import sampleImage from "../assets/img/airpods.jpg";
 
-const bagItems = [
-  {
-    date: "Wednesday Feb 24, 2021",
-    name: "Airpods Wireless Bluetooth Headphones",
-    itemId: "662287-27122",
-    price: 161,
-    seller: "Hudson Store",
-    qty: 1,
-    countInStock: 10,
-  },
-  {
-    date: "Wednesday Feb 24, 2021",
-    name: "iPhone 11 Pro 256GB Memory",
-    itemId: "662287-271225",
-    price: 161,
-    seller: "Hudson Store",
-    qty: 1,
-    countInStock: 10,
-  },
-];
-
 let today = new Date();
 let dd = String(today.getDate()).padStart(2, "0");
 let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -203,7 +182,12 @@ const BagScreen = ({ match, location }) => {
               <Card className="mb-3" key={item.id}>
                 <Row className="d-flex align-items-center">
                   <Col md={3}>
-                    <Image src={sampleImage} alt={item.title} fluid rounded />
+                    <Image
+                      src={item.imagesUrl}
+                      alt={item.title}
+                      fluid
+                      rounded
+                    />
                   </Col>
                   <Col md={5}>
                     <div className="mb-1">{today}</div>

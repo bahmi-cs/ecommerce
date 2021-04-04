@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
-import sampleImage from "../assets/img/airpods.jpg";
 
 const Product = ({ product }) => {
   return (
     <Card className="my-3 p-2 rounded">
       <Link to={`/product/${product.id}`}>
-        <Card.Img src={sampleImage} valiant="top" />
+        <Card.Img src={product.imagesUrl[0]} valiant="top" />
       </Link>
 
       <Card.Body>

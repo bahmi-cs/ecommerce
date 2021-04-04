@@ -22,39 +22,44 @@ const ItemScreen = ({ match }) => {
 
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
+  const [product, setProduct] = useState({});
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
 
-  const product = {
-    storeId: "298910",
-    storeName: "Hudson Store",
-    storeLocation: "Mississauga, ON",
-    title: "Airpods Wireless Bluetooth Headphones",
-    itemId: "662287-27122",
-    barcode: "66228727122",
-    pictures: "img",
-    price: 89.9,
-    discountedPrice: 75.5,
-    description:
-      "Bluetooth technology lets you connect it with compatible devices wirelessly High-quality AAC audio offers immersive listening experience Built-in microphone allows you to take calls while working",
-    category: "Kids",
-    quantity: 5,
-    condition: "new",
-    status: "pending",
-  };
+  const productId = match.params.id;
 
-  const getProduct = async () => {
-    const userRef = db.collection("items").doc(user.uid);
-    const doc = await userRef.get();
-    if (!doc.exists) {
-      console.log("No such document!");
-    } else {
-      const product = doc.data();
+  // .then((snapshot) => {
+  //   snapshot.docs.forEach((item) => {
+  //     let currentID = item.id;
+  //     let appObj = { ...item.data(), ["id"]: currentID };
+  //     allItems.push(appObj);
+  //     console.log(appObj);
+  //   });
+  //   setStoreItems(allItems);
+  // });
 
-      console.log("Document data:", doc.data());
-    }
-  };
+  useEffect(() => {
+    const getProduct = async () => {
+      let item = {};
+
+      await db
+        .collection("items")
+        .doc(productId)
+        .get()
+        .then((snapshot) => {
+          console.log(snapshot.id);
+          item = snapshot.data();
+          item.id = snapshot.id;
+          console.log(item);
+
+          // console.log(snapshot.data());
+          setProduct(item);
+        });
+    };
+    getProduct();
+    setLoading(false);
+  }, []);
 
   // const addToCart = (productId) => {
   //   let cartCopy = [...cartItems];
@@ -104,11 +109,6 @@ const ItemScreen = ({ match }) => {
     // history.push(`/bag/${match.params.id}?qty=${qty}`);
   };
 
-  useEffect(() => {
-    // getProduct();
-    // setLoading(false);
-  }, []);
-
   return (
     <>
       <Link className="btn btn-primary my-3" to="/">
@@ -122,7 +122,7 @@ const ItemScreen = ({ match }) => {
         <>
           <Row>
             <Col md={5}>
-              <Image src={sampleImage} alt={"product.name"} fluid />
+              <Image src={product?.imagesUrl} alt={product.title} fluid />
             </Col>
             <Col md={4}>
               <ListGroup variant="flush">
@@ -131,7 +131,7 @@ const ItemScreen = ({ match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <strong>Item ID: </strong>
-                  {product.itemId}
+                  {product.id}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <strong>Barcode: </strong>
@@ -151,7 +151,7 @@ const ItemScreen = ({ match }) => {
                   {product.storeLocation}
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <strong>Store ID:</strong> {product.storeId}
+                  <strong>Store ID:</strong> {product.store_id}
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <strong>Description:</strong>
