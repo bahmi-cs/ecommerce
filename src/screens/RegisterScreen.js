@@ -45,7 +45,7 @@ const RegisterScreen = () => {
       fullName: fullName,
       mobileNumber: mobileNumber,
       email: email,
-      password: password,
+      // password: password,
       country: country,
       province: province,
       city: city,

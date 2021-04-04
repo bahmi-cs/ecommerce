@@ -23,8 +23,6 @@ import { useAuthListener } from "./hooks";
 function App() {
   const { user } = useAuthListener();
 
-  
-
   return (
     <>
       <Router>
@@ -47,7 +45,7 @@ function App() {
             </IsUserRedirect>
             <Route path="/bag/:id?" component={BagScreen} exact />
             {/* <Route path="/orders" component={OrderScreen} exact /> */}
-            <Route path="/product/:id" component={ItemScreen} exact />
+            <Route path="/product/:id?" component={ItemScreen} exact />
             <Route path="/store/:id?" component={StoreScreen} exact />
             {/* <Route path="/updates" component={UpdatesScreen} exact /> */}
             <Route path="/addstore" component={AddStoreScreen} exact />

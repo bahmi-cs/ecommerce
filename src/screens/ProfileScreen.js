@@ -20,7 +20,6 @@ const ProfileScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-
   //   console.log("user", user);
 
   const getUser = async () => {
