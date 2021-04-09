@@ -48,7 +48,7 @@ const Header = () => {
                   <NavDropdown.Item
                     onClick={() => {
                       firebase.auth().signOut();
-                      history.push("/signin");
+                      window.location.href = "/";
                     }}
                   >
                     Sign Out

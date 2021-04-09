@@ -23,7 +23,7 @@ const ProfileScreen = () => {
   //   console.log("user", user);
 
   const getUser = async () => {
-    const userRef = db.collection("users").doc(user.uid);
+    const userRef = db.collection("customers").doc(user.uid);
     const doc = await userRef.get();
     if (!doc.exists) {
       console.log("No such document!");
@@ -39,7 +39,7 @@ const ProfileScreen = () => {
 
   const updateUser = async () => {
     await db
-      .collection("users")
+      .collection("customers")
       .doc(user.uid)
       .update({
         fullName: fullName,

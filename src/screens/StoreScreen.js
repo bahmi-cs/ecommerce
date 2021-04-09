@@ -84,13 +84,13 @@ const StoreScreen = ({ match }) => {
               <Card.Img src={store.storeLogo} valiant="top" />
 
               <Card.Body className="text-center">
-                <Card.Text as="div">
+                <Card.Text as="h6">
                   <strong>{store.storeName}</strong>
                 </Card.Text>
 
-                <Card.Text as="h6">
+                {/* <Card.Text as="h6">
                   ID: <br /> {storeId}
-                </Card.Text>
+                </Card.Text> */}
               </Card.Body>
             </Card>
             <Card className="mt-4 rounded">

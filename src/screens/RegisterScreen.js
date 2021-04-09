@@ -40,12 +40,11 @@ const RegisterScreen = () => {
     shippingInstruction === "";
 
   async function addToUsersCollection(result) {
-    const res = await db.collection("users").doc(result.user.uid).set({
+    const res = await db.collection("customers").doc(result.user.uid).set({
       uid: result.user.uid,
       fullName: fullName,
       mobileNumber: mobileNumber,
       email: email,
-      // password: password,
       country: country,
       province: province,
       city: city,
@@ -65,9 +64,12 @@ const RegisterScreen = () => {
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then((result) => {
+          console.log(result.user);
+          result.user.sendEmailVerification();
           result.user.updateProfile({
             displayName: fullName,
           });
+          // result.user.sendEmailVerification();
           addToUsersCollection(result);
         })
         .then(() => {

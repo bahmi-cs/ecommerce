@@ -26,6 +26,7 @@ const ItemScreen = ({ match }) => {
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [images, setImages] = useState("");
 
   const productId = match.params.id;
 
@@ -52,8 +53,9 @@ const ItemScreen = ({ match }) => {
           item = snapshot.data();
           item.id = snapshot.id;
           console.log(item);
-
-          // console.log(snapshot.data());
+          console.log(Object.values(snapshot.data().imagesUrl)[0]);
+          setImages(Object.values(snapshot.data().imagesUrl)[0]);
+          console.log(snapshot.data().imagesUrl[0]);
           setProduct(item);
         });
     };
@@ -122,7 +124,7 @@ const ItemScreen = ({ match }) => {
         <>
           <Row>
             <Col md={5}>
-              <Image src={product?.imagesUrl} alt={product.title} fluid />
+              <Image src={images} alt={product.title} fluid />
             </Col>
             <Col md={4}>
               <ListGroup variant="flush">
@@ -150,9 +152,9 @@ const ItemScreen = ({ match }) => {
                   {product.storeName} <br />
                   {product.storeLocation}
                 </ListGroup.Item>
-                <ListGroup.Item>
+                {/* <ListGroup.Item>
                   <strong>Store ID:</strong> {product.store_id}
-                </ListGroup.Item>
+                </ListGroup.Item> */}
                 <ListGroup.Item>
                   <strong>Description:</strong>
                   {product.description}
