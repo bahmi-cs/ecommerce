@@ -22,6 +22,7 @@ const ItemScreen = ({ match }) => {
 
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
+  const [storeName, setStoreName] = useState("");
   const [product, setProduct] = useState({});
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -40,6 +41,18 @@ const ItemScreen = ({ match }) => {
   //   setStoreItems(allItems);
   // });
 
+  const getStore = async (store_id) => {
+    const storeRef = db.collection("stores").doc(store_id);
+    const doc = await storeRef.get();
+    if (!doc.exists) {
+      console.log("No such document!");
+    } else {
+      const { storeName } = doc.data();
+      setStoreName(storeName);
+      console.log("Document data:", doc.data());
+    }
+  };
+
   useEffect(() => {
     const getProduct = async () => {
       let item = {};
@@ -49,13 +62,13 @@ const ItemScreen = ({ match }) => {
         .doc(productId)
         .get()
         .then((snapshot) => {
-          console.log(snapshot.id);
+          // console.log(snapshot.id);
           item = snapshot.data();
           item.id = snapshot.id;
+          getStore(item.store_id);
           console.log(item);
-          console.log(Object.values(snapshot.data().imagesUrl)[0]);
+          // console.log(Object.values(snapshot.data().imagesUrl)[0]);
           setImages(Object.values(snapshot.data().imagesUrl)[0]);
-          console.log(snapshot.data().imagesUrl[0]);
           setProduct(item);
         });
     };
@@ -148,7 +161,7 @@ const ItemScreen = ({ match }) => {
                   (Including Taxes and Fees)
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <strong>Seller: </strong>
+                  <strong>Seller: {storeName}</strong>
                   {product.storeName} <br />
                   {product.storeLocation}
                 </ListGroup.Item>
