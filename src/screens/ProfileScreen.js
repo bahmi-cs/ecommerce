@@ -78,7 +78,6 @@ const ProfileScreen = () => {
           <h3 className="mb-3">User Profile</h3>
           {message && <Message variant="info">{message}</Message>}
           {error && <Message>{error}</Message>}
-          {/* {errorProfile && <Message variant="danger">{errorProfile}</Message>} */}
           {loading ? (
             <Loader />
           ) : (
@@ -111,26 +110,6 @@ const ProfileScreen = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-
-              {/* <Form.Group controlId="password">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Enter Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group controlId="confirmPassword">
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                ></Form.Control>
-              </Form.Group> */}
               <Form.Group controlId="address">
                 <Form.Label>Address</Form.Label>
                 <Form.Control

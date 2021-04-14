@@ -17,7 +17,6 @@ import { Link, useHistory } from "react-router-dom";
 import { useAuthListener } from "../hooks";
 import { FirebaseContext } from "../context/firebase";
 import { Message, Loader } from "../components";
-import sampleImage from "../assets/img/airpods.jpg";
 
 let today = new Date();
 let dd = String(today.getDate()).padStart(2, "0");
@@ -38,7 +37,6 @@ const BagScreen = ({ match, location }) => {
   const [amount, setAmount] = useState(5);
   const [orderID, setOrderID] = useState(false);
   const productId = match.params.id;
-  // const qty = location.search ? Number(location.search.split("=")[1]) : 1;
 
   // console.log(productId, qty);
 
@@ -84,66 +82,6 @@ const BagScreen = ({ match, location }) => {
     });
   };
 
-  // const getProduct = async () => {
-  //   const userRef = db.collection("items").doc(user.uid);
-  //   const doc = await userRef.get();
-  //   if (!doc.exists) {
-  //     console.log("No such document!");
-  //   } else {
-  //     const product = doc.data();
-
-  //     console.log("Document data:", doc.data());
-  //   }
-  // };
-
-  //checks if an item exists
-  // const item = bagItems.some((item) => item.itemId === productId);
-
-  // const addToCart = (productId) => {
-  //   let cartCopy = [...cartItems];
-
-  //   const item = bagItems.find((item) => item.itemId === productId);
-
-  //   let existingItem = cartCopy.find(
-  //     (cartItem) => cartItem.itemId === productId
-  //   );
-
-  //   if (existingItem) {
-  //     existingItem.qty += qty; //update item
-  //   } else {
-  //     //if item doesn't exist, simply add it
-  //     cartCopy.push(item);
-  //   }
-
-  //   setCartItems(cartCopy);
-
-  //   let stringCart = JSON.stringify(cartCopy);
-  //   localStorage.setItem("cart", stringCart);
-  // };
-
-  // const updateItem = (productId, amount) => {
-  //   let cartCopy = [...cartItems];
-
-  //   // const item = bagItems.find((item) => item.itemId === product.itemId);
-
-  //   let existingItem = cartCopy.find(
-  //     (cartItem) => cartItem.itemId === product.itemId
-  //   );
-
-  //   if (existingItem) {
-  //     existingItem.quantity += qty; //update item
-  //   } else {
-  //     //if item doesn't exist, simply add it
-  //     product.quantity = Number(qty);
-  //     cartCopy.push(product);
-  //   }
-
-  //   setCartItems(cartCopy);
-
-  //   let stringCart = JSON.stringify(cartCopy);
-  //   localStorage.setItem("cart", stringCart);
-  // };
-
   const removeItemHandler = (id) => {
     let cartCopy = [...cartItems];
     cartCopy = cartCopy.filter((item) => item.itemId != id);
@@ -154,17 +92,12 @@ const BagScreen = ({ match, location }) => {
   };
 
   useEffect(() => {
-    //make call to firestore and get details of the item with the id
-
     localCart = JSON.parse(localCart);
+    console.log(localCart);
 
     if (localCart) {
       setCartItems(localCart);
     }
-
-    // if (productId) {
-    //   addToCart(productId, qty);
-    // }
   }, [localCart]);
 
   return (
@@ -183,7 +116,7 @@ const BagScreen = ({ match, location }) => {
                 <Row className="d-flex align-items-center">
                   <Col md={3}>
                     <Image
-                      src={item.imagesUrl}
+                      src={item.imagesUrl[0]}
                       alt={item.title}
                       fluid
                       rounded
@@ -191,9 +124,11 @@ const BagScreen = ({ match, location }) => {
                   </Col>
                   <Col md={5}>
                     <div className="mb-1">{today}</div>
-                    <Link to={`/product/${item.itemId}`}>{item.title}</Link>
+                    <h6>
+                      <Link to={`/product/${item.id}`}>{item.title}</Link>
+                    </h6>
                     <br />
-                    <div className="mt-3">
+                    <div className="">
                       <strong>Price: </strong>CAD${item.price}
                     </div>
                     <div>
@@ -203,13 +138,7 @@ const BagScreen = ({ match, location }) => {
                   </Col>
 
                   <Col md={2}>
-                    <Form.Control
-                      as="select"
-                      value={item.quantity}
-                      onChange={(e) => {
-                        // updateItem(item.itemId, Number(e.target.value));
-                      }}
-                    >
+                    <Form.Control as="select" value={item.quantity}>
                       {<option>{item.quantity}</option>}
                       {/* {[...Array(item.quantity).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
@@ -237,8 +166,6 @@ const BagScreen = ({ match, location }) => {
         <Card className="mb-2 mt-5">
           <ListGroup variant="flush">
             <ListGroup.Item>
-              {/* <h2></h2>
-              <h5 className="float-right"></h5> */}
               <div className="row">
                 <div className="col-md-12 d-flex">
                   <strong>Shipping: </strong>

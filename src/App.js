@@ -9,8 +9,6 @@ import {
   BrowseScreen,
   BagScreen,
   ProfileScreen,
-  AddItemScreen,
-  AddStoreScreen,
   ItemScreen,
   UpdatesScreen,
   OrderScreen,
@@ -44,12 +42,8 @@ function App() {
               <RegisterScreen />
             </IsUserRedirect>
             <Route path="/bag/:id?" component={BagScreen} exact />
-            {/* <Route path="/orders" component={OrderScreen} exact /> */}
             <Route path="/product/:id?" component={ItemScreen} exact />
             <Route path="/store/:id?" component={StoreScreen} exact />
-            {/* <Route path="/updates" component={UpdatesScreen} exact /> */}
-            <Route path="/addstore" component={AddStoreScreen} exact />
-            <Route path="/additem" component={AddItemScreen} exact />
             <Route path="/profile" component={ProfileScreen} exact />
 
             <ProtectedRoute user={user} path={ROUTES.BROWSE}>

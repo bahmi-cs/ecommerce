@@ -10,27 +10,28 @@ const HomeScreen = () => {
   const db = firebase.firestore();
   const { user } = useAuthListener();
 
-  // const [province, setProvince] = useState("");
+  const [province, setProvince] = useState("");
   const [stores, setStores] = useState([]);
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // const getUser = async () => {
-  //   const userRef = db.collection("users").doc(user.uid);
-  //   const doc = await userRef.get();
-  //   if (!doc.exists) {
-  //     console.log("No such document!");
-  //   } else {
-  //     const { province } = doc.data();
-  //     setProvince(province);
-  //     console.log("Document data:", doc.data());
-  //   }
-  // };
+  const getUser = async () => {
+    const userRef = db.collection("customers").doc(user?.uid);
+    const doc = await userRef.get();
+    if (!doc.exists) {
+      console.log("No such document!");
+    } else {
+      const { province } = doc.data();
+      setProvince(province);
+      console.log("Document data:", doc.data());
+    }
+  };
 
-  // useEffect(() => {
-  //   getUser();
-  // });
+  useEffect(() => {
+    getUser();
+    console.log(province);
+  });
 
   useEffect(() => {
     const allStores = [];
@@ -55,10 +56,12 @@ const HomeScreen = () => {
       ) : (
         <>
           <div className="mb-3">
-            <strong>
-              Delivery to: <br />
-              {/* <strong>{province}</strong> */}
-            </strong>
+            {province ? (
+              <strong>
+                Delivery to: <br />
+                <strong>{province}</strong>
+              </strong>
+            ) : undefined}
           </div>
           <Row>
             {stores.map((store) => (

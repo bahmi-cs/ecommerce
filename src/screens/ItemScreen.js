@@ -9,7 +9,6 @@ import {
   Form,
 } from "react-bootstrap";
 import { Loader, Message } from "../components";
-import sampleImage from "../assets/img/airpods.jpg";
 import { Link, useHistory } from "react-router-dom";
 import { useAuthListener } from "../hooks";
 import { FirebaseContext } from "../context/firebase";
@@ -30,16 +29,6 @@ const ItemScreen = ({ match }) => {
   const [images, setImages] = useState("");
 
   const productId = match.params.id;
-
-  // .then((snapshot) => {
-  //   snapshot.docs.forEach((item) => {
-  //     let currentID = item.id;
-  //     let appObj = { ...item.data(), ["id"]: currentID };
-  //     allItems.push(appObj);
-  //     console.log(appObj);
-  //   });
-  //   setStoreItems(allItems);
-  // });
 
   const getStore = async (store_id) => {
     const storeRef = db.collection("stores").doc(store_id);
@@ -62,12 +51,10 @@ const ItemScreen = ({ match }) => {
         .doc(productId)
         .get()
         .then((snapshot) => {
-          // console.log(snapshot.id);
           item = snapshot.data();
           item.id = snapshot.id;
           getStore(item.store_id);
           console.log(item);
-          // console.log(Object.values(snapshot.data().imagesUrl)[0]);
           setImages(Object.values(snapshot.data().imagesUrl)[0]);
           setProduct(item);
         });
@@ -76,32 +63,8 @@ const ItemScreen = ({ match }) => {
     setLoading(false);
   }, []);
 
-  // const addToCart = (productId) => {
-  //   let cartCopy = [...cartItems];
-
-  //   const item = bagItems.find((item) => item.itemId === productId);
-
-  //   let existingItem = cartCopy.find(
-  //     (cartItem) => cartItem.itemId === productId
-  //   );
-
-  //   if (existingItem) {
-  //     existingItem.qty += qty; //update item
-  //   } else {
-  //     //if item doesn't exist, simply add it
-  //     cartCopy.push(item);
-  //   }
-
-  //   setCartItems(cartCopy);
-
-  //   let stringCart = JSON.stringify(cartCopy);
-  //   localStorage.setItem("cart", stringCart);
-  // };
-
   const addToCartHandler = () => {
     let cartCopy = [...cartItems];
-
-    // const item = bagItems.find((item) => item.itemId === product.itemId);
 
     let existingItem = cartCopy.find(
       (cartItem) => cartItem.itemId === product.itemId
@@ -121,7 +84,6 @@ const ItemScreen = ({ match }) => {
     localStorage.setItem("cart", stringCart);
 
     history.push(`/bag`);
-    // history.push(`/bag/${match.params.id}?qty=${qty}`);
   };
 
   return (
@@ -165,9 +127,6 @@ const ItemScreen = ({ match }) => {
                   {product.storeName} <br />
                   {product.storeLocation}
                 </ListGroup.Item>
-                {/* <ListGroup.Item>
-                  <strong>Store ID:</strong> {product.store_id}
-                </ListGroup.Item> */}
                 <ListGroup.Item>
                   <strong>Description:</strong>
                   {product.description}
@@ -187,16 +146,6 @@ const ItemScreen = ({ match }) => {
                   <ListGroup.Item>
                     <strong>Condition:</strong> <br /> {product.condition}
                   </ListGroup.Item>
-                  {/* <ListGroup.Item>
-                    <Row>
-                      <Col className="font-weight-bold">Quantity</Col>
-                      <Col>
-                        <Form.Control as="select">
-                          <option>1</option>
-                        </Form.Control>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item> */}
                   {product.quantity > 0 && (
                     <ListGroup.Item>
                       <Row>
@@ -209,15 +158,11 @@ const ItemScreen = ({ match }) => {
                               setQty(e.target.value);
                             }}
                           >
-                            {
-                              // if the count in stock is 5,
-                              // this will give an array with [0,1,2,3,4]
-                              [...Array(product.quantity).keys()].map((x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
-                                </option>
-                              ))
-                            }
+                            {[...Array(product.quantity).keys()].map((x) => (
+                              <option key={x + 1} value={x + 1}>
+                                {x + 1}
+                              </option>
+                            ))}
                           </Form.Control>
                         </Col>
                       </Row>

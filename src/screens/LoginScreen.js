@@ -4,7 +4,6 @@ import { Form, Button, Row, Col, Image } from "react-bootstrap";
 import { Message, FormContainer } from "../components";
 import { FirebaseContext } from "../context/firebase";
 import * as ROUTES from "../constants/routes";
-// import LoginCSS from "../styles/Login.module.css";
 
 const LoginScreen = () => {
   const history = useHistory();

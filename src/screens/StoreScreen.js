@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Image, Form, Card, Button } from "react-bootstrap";
+import { Row, Col, Form, Card, Button } from "react-bootstrap";
 import { Message, Product, Loader } from "../components";
 import { FirebaseContext } from "../context/firebase";
 
@@ -34,7 +34,6 @@ const StoreScreen = ({ match }) => {
 
   useEffect(() => {
     const getStoreItems = async () => {
-      // setLoading(true);
       const allItems = [];
 
       await db
@@ -55,24 +54,6 @@ const StoreScreen = ({ match }) => {
     getStoreItems();
   }, []);
 
-  // useEffect(() => {
-  //   const getStoreItems = async () => {
-  //     setLoading(true);
-  //     const storeCollection = await db
-  //       .collection("items")
-  //       .where("store_id", "==", storeId)
-  //       .get();
-  //     setStoreItems(
-  //       storeCollection.docs.map((doc) => {
-  //         console.log(doc.data());
-  //         return doc.data();
-  //       })
-  //     );
-  //     setLoading(false);
-  //   };
-  //   getStoreItems();
-  // }, []);
-
   return (
     <>
       {loading ? (
@@ -87,10 +68,6 @@ const StoreScreen = ({ match }) => {
                 <Card.Text as="h6">
                   <strong>{store.storeName}</strong>
                 </Card.Text>
-
-                {/* <Card.Text as="h6">
-                  ID: <br /> {storeId}
-                </Card.Text> */}
               </Card.Body>
             </Card>
             <Card className="mt-4 rounded">
@@ -102,15 +79,9 @@ const StoreScreen = ({ match }) => {
                   <Form>
                     <Row className="p-2">
                       <Col>
-                        {/* <Form.Label className="my-1 mr-2" htmlFor="from">
-                      From
-                    </Form.Label> */}
                         <Form.Control placeholder="From" />
                       </Col>
                       <Col>
-                        {/* <Form.Label className="my-1 mr-2" htmlFor="from">
-                      To
-                    </Form.Label> */}
                         <Form.Control placeholder="To" />
                       </Col>
                     </Row>
@@ -124,8 +95,6 @@ const StoreScreen = ({ match }) => {
                       High to Low
                     </Button>
                   </div>
-                  {/* <Link to="/"></Link> */}
-                  {/* <Link to="/"></Link> */}
                 </Card.Text>
               </Card.Body>
             </Card>

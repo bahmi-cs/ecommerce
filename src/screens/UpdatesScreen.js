@@ -2,21 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import { Loader, Message } from "../components";
 
-const UpdatesScreen = ({ history, match }) => {
+const UpdatesScreen = () => {
   const [updates, setUpdates] = useState([]);
   const [error, setError] = useState("");
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  //   useEffect(() => {
-  //     if (successProductReview) {
-  //       setRating(0);
-  //       setComment("");
-  //       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
-  //     }
-
-  //     dispatch(listProductDetails(match.params.id));
-  //   }, [dispatch, match, product]);
 
   return (
     <>

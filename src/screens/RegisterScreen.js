@@ -69,11 +69,10 @@ const RegisterScreen = () => {
           result.user.updateProfile({
             displayName: fullName,
           });
-          // result.user.sendEmailVerification();
           addToUsersCollection(result);
         })
         .then(() => {
-          history.push(ROUTES.BROWSE);
+          history.push(ROUTES.HOME);
         })
         .catch((error) => {
           setPassword("");
@@ -118,12 +117,6 @@ const RegisterScreen = () => {
                     onChange={(val) => setCountry(val)}
                     priorityOptions={["CA", "US", "GB"]}
                   />
-                  {/* <Form.Control
-                    type="text"
-                    placeholder="Enter Country"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                  ></Form.Control> */}
                 </Form.Group>
               </Col>
             </Form.Row>
@@ -148,12 +141,6 @@ const RegisterScreen = () => {
                     value={province}
                     onChange={(val) => setProvince(val)}
                   />
-                  {/* <Form.Control
-                    type="text"
-                    placeholder="Enter Province"
-                    value={province}
-                    onChange={(e) => setProvince(e.target.value)}
-                  ></Form.Control> */}
                 </Form.Group>
               </Col>
             </Form.Row>
@@ -249,14 +236,6 @@ const RegisterScreen = () => {
             >
               Create
             </Button>
-            {/* <Col xs={12} md={6}>
-              <Row className="py-2 mt-4 float-right">
-                <Col>
-                  Already have an account?
-                  <Link to="/login"> Sign In</Link>
-                </Col>
-              </Row>
-            </Col> */}
           </Form>
         </Col>
       </Row>

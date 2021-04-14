@@ -18,28 +18,16 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
-              <Nav.Link href="/">
-                {/* <i className="fas fa-home" />  */}
-                Home
-              </Nav.Link>
-              {/* <Nav.Link href="/itemscreen">Item Details</Nav.Link> */}
+              <Nav.Link href="/">Home</Nav.Link>
               {user ? <Nav.Link href="/updates">Updates</Nav.Link> : ""}
               {user ? (
                 <>
-                  <Nav.Link href="/orders">
-                    {/* <i className="fas fa-home" />  */}
-                    Orders
-                  </Nav.Link>
-                  {/* <Nav.Link href="/addstore">Add Store</Nav.Link>
-                  <Nav.Link href="/additem">Add Item</Nav.Link> */}
+                  <Nav.Link href="/orders">Orders</Nav.Link>
                 </>
               ) : (
                 ""
               )}
-              <Nav.Link href="/bag">
-                {/* <i className="fas fa-shopping-cart" />  */}
-                Bag
-              </Nav.Link>
+              <Nav.Link href="/bag">Bag</Nav.Link>
               {user ? (
                 <NavDropdown title="Account" id="username">
                   <LinkContainer to="/profile">
@@ -55,10 +43,7 @@ const Header = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
-                <Nav.Link href="/signin">
-                  {/* <i className="fas fa-user" />  */}
-                  Sign In
-                </Nav.Link>
+                <Nav.Link href="/signin">Sign In</Nav.Link>
               )}
             </Nav>
           </Navbar.Collapse>

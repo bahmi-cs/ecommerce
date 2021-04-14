@@ -4,11 +4,7 @@ import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { Message } from "../components";
 import sampleImage from "../assets/img/airpods.jpg";
 
-const OrderScreen = ({ match, location }) => {
-  const [cartItems, setCartItems] = useState([]);
-  // const productId = match.params.id;
-  // const qty = location.search ? Number(location.search.split("=")[1]) : 1;
-
+const OrderScreen = () => {
   const orderItems = [
     {
       date: "Wednesday Feb 25, 2021",
@@ -59,20 +55,6 @@ const OrderScreen = ({ match, location }) => {
       shipping: 2.0,
     },
   ];
-
-  //   useEffect(() => {
-  //     if (productId) {
-  //       dispatch(addToCart(productId, qty));
-  //     }
-  //   }, [dispatch, productId, qty]);
-
-  //   const removeItemHandler = (id) => {
-  //     dispatch(removeFromCart(id));
-  //   };
-
-  //   const checkoutHandler = () => {
-  //     history.push("/login?redirect=shipping");
-  //   };
 
   return (
     <Row>
@@ -151,7 +133,6 @@ const OrderScreen = ({ match, location }) => {
                       <ListGroup variant="flush">
                         <strong className="pl-1">Sales Proceeds </strong>
                         <ListGroup.Item>
-                          {/* <Row> */}
                           <div class="col-md-12 d-flex">
                             <strong>Subtotal: </strong>
                             <div class="ml-auto">
@@ -160,9 +141,7 @@ const OrderScreen = ({ match, location }) => {
                             </div>
                           </div>
                           <div class="d-flex justify-content-between">
-                            <div className="ml-3 font-weight-bold">
-                              Shipping:
-                            </div>
+                            <div className="ml-3">Shipping:</div>
                             <div className="mr-3">
                               CAD${item.shipping.toFixed(2)}
                             </div>
@@ -178,7 +157,6 @@ const OrderScreen = ({ match, location }) => {
                               CAD${(item.subtotal + item.shipping).toFixed(2)}
                             </div>
                           </div>
-                          {/* </Row> */}
                         </ListGroup.Item>
                       </ListGroup>
                     </Card>
