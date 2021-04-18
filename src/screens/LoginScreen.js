@@ -21,7 +21,7 @@ const LoginScreen = () => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        history.push(ROUTES.HOME);
+        window.location.href = "/";
       })
       .catch((error) => {
         setEmail("");

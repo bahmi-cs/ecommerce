@@ -4,8 +4,6 @@ import {
   Col,
   Card,
   Alert,
-  ButtonGroup,
-  Button,
   ToggleButtonGroup,
   ToggleButton,
 } from "react-bootstrap";
@@ -30,32 +28,76 @@ const HomeScreen = () => {
     const doc = await userRef.get();
     if (!doc.exists) {
       console.log("No such document!");
+
+      const allStores = [];
+      db.collection("stores")
+        .get()
+        .then((snapshot) => {
+          snapshot.docs.forEach((store) => {
+            let currentID = store.id;
+            let appObj = { ...store.data(), ["id"]: currentID };
+            allStores.push(appObj);
+          });
+          setStores(allStores);
+        });
     } else {
       const { province } = doc.data();
       setProvince(province);
-      console.log("Document data:", doc.data());
+
+      let allStores = [];
+      db.collection("stores")
+        .get()
+        .then((snapshot) => {
+          snapshot.docs.forEach((store) => {
+            let currentID = store.id;
+            let appObj = { ...store.data(), ["id"]: currentID };
+            allStores.push(appObj);
+          });
+          allStores = allStores.filter((store) => store.province === province);
+          setStores(allStores);
+        });
     }
   };
 
   useEffect(() => {
-    getUser();
-    console.log(province);
-  });
+    const getData = async () => {
+      const userRef = db.collection("customers").doc(user?.uid);
+      const doc = await userRef.get();
+      if (!doc.exists) {
+        console.log("No such user!");
 
-  useEffect(() => {
-    const allStores = [];
-    db.collection("stores")
-      .get()
-      .then((snapshot) => {
-        snapshot.docs.forEach((store) => {
-          let currentID = store.id;
-          let appObj = { ...store.data(), ["id"]: currentID };
-          allStores.push(appObj);
+        const allStores = [];
+        db.collection("stores")
+          .get()
+          .then((snapshot) => {
+            snapshot.docs.forEach((store) => {
+              let currentID = store.id;
+              let appObj = { ...store.data(), ["id"]: currentID };
+              allStores.push(appObj);
+            });
+            setStores(allStores);
+          });
+      } else {
+        const { province } = doc.data();
+        setProvince(province);
 
-          // allStores.push(store.data());
-        });
-        setStores(allStores);
-      });
+        let allStores = [];
+        db.collection("stores")
+          .get()
+          .then((snapshot) => {
+            snapshot.docs.forEach((store) => {
+              let currentID = store.id;
+              let appObj = { ...store.data(), ["id"]: currentID };
+              allStores.push(appObj);
+            });
+            allStores = allStores.filter(
+              (store) => store.province === province
+            );
+            setStores(allStores);
+          });
+      }
+    };
+    getData();
   }, []);
 
   return (
@@ -64,7 +106,7 @@ const HomeScreen = () => {
         <Loader />
       ) : (
         <>
-          <Row>
+          <Row className="mb-1">
             <Col>
               <div className="mb-3">
                 {province ? (
@@ -78,7 +120,7 @@ const HomeScreen = () => {
             <Col>
               <Alert
                 variant="light"
-                className="border-secondary text-center shadow rounded mb-2"
+                className="border-secondary text-center shadow rounded"
               >
                 Free Shipping for all orders over 35$
               </Alert>
