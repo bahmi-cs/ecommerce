@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Row, Col, Card } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Card,
+  Alert,
+  ButtonGroup,
+  Button,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "react-bootstrap";
 import { Message, Loader } from "../components";
 import { FirebaseContext } from "../context/firebase";
 import { Link } from "react-router-dom";
@@ -55,14 +64,69 @@ const HomeScreen = () => {
         <Loader />
       ) : (
         <>
-          <div className="mb-3">
-            {province ? (
-              <strong>
-                Delivery to: <br />
-                <strong>{province}</strong>
-              </strong>
-            ) : undefined}
-          </div>
+          <Row>
+            <Col>
+              <div className="mb-3">
+                {province ? (
+                  <strong>
+                    Delivery to: <br />
+                    <strong>{province}</strong>
+                  </strong>
+                ) : undefined}
+              </div>
+            </Col>
+            <Col>
+              <Alert
+                variant="light"
+                className="border-secondary text-center shadow rounded mb-2"
+              >
+                Free Shipping for all orders over 35$
+              </Alert>
+            </Col>
+            <Col></Col>
+          </Row>
+
+          <Row className="justify-content-md-center mb-3">
+            <Col md="auto">
+              <ToggleButtonGroup
+                type="radio"
+                size="sm"
+                name="options"
+                defaultValue={1}
+              >
+                <ToggleButton
+                  className="mx-3"
+                  variant="btn btn-outline-primary rounded-pill shadow"
+                  value={1}
+                >
+                  Stores
+                </ToggleButton>
+                <ToggleButton
+                  className="mx-3"
+                  value={2}
+                  variant="btn btn-outline-primary rounded-pill shadow"
+                >
+                  All
+                </ToggleButton>
+                <ToggleButton
+                  className="mx-3"
+                  value={3}
+                  variant="btn btn-outline-primary rounded-pill shadow"
+                >
+                  Men's Fashion
+                </ToggleButton>
+                <ToggleButton
+                  className="mx-3"
+                  value={4}
+                  variant="btn btn-outline-primary rounded-pill shadow"
+                >
+                  Electronic
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Col>
+          </Row>
+
+          <div className=""></div>
           <Row>
             {stores.map((store) => (
               <Col key={store.id} sm={12} md={6} lg={2} xl={2}>

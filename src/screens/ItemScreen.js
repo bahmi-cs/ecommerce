@@ -23,7 +23,6 @@ const ItemScreen = ({ match }) => {
   const [error, setError] = useState("");
   const [storeName, setStoreName] = useState("");
   const [product, setProduct] = useState({});
-  const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [images, setImages] = useState("");
@@ -54,7 +53,7 @@ const ItemScreen = ({ match }) => {
           item = snapshot.data();
           item.id = snapshot.id;
           getStore(item.store_id);
-          console.log(item);
+          // console.log(item);
           setImages(Object.values(snapshot.data().imagesUrl)[0]);
           setProduct(item);
         });
