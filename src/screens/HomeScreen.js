@@ -23,41 +23,41 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const getUser = async () => {
-    const userRef = db.collection("customers").doc(user?.uid);
-    const doc = await userRef.get();
-    if (!doc.exists) {
-      console.log("No such document!");
+  // const getUser = async () => {
+  //   const userRef = db.collection("customers").doc(user?.uid);
+  //   const doc = await userRef.get();
+  //   if (!doc.exists) {
+  //     console.log("No such document!");
 
-      const allStores = [];
-      db.collection("stores")
-        .get()
-        .then((snapshot) => {
-          snapshot.docs.forEach((store) => {
-            let currentID = store.id;
-            let appObj = { ...store.data(), ["id"]: currentID };
-            allStores.push(appObj);
-          });
-          setStores(allStores);
-        });
-    } else {
-      const { province } = doc.data();
-      setProvince(province);
+  //     const allStores = [];
+  //     db.collection("stores")
+  //       .get()
+  //       .then((snapshot) => {
+  //         snapshot.docs.forEach((store) => {
+  //           let currentID = store.id;
+  //           let appObj = { ...store.data(), ["id"]: currentID };
+  //           allStores.push(appObj);
+  //         });
+  //         setStores(allStores);
+  //       });
+  //   } else {
+  //     const { province } = doc.data();
+  //     setProvince(province);
 
-      let allStores = [];
-      db.collection("stores")
-        .get()
-        .then((snapshot) => {
-          snapshot.docs.forEach((store) => {
-            let currentID = store.id;
-            let appObj = { ...store.data(), ["id"]: currentID };
-            allStores.push(appObj);
-          });
-          allStores = allStores.filter((store) => store.province === province);
-          setStores(allStores);
-        });
-    }
-  };
+  //     let allStores = [];
+  //     db.collection("stores")
+  //       .get()
+  //       .then((snapshot) => {
+  //         snapshot.docs.forEach((store) => {
+  //           let currentID = store.id;
+  //           let appObj = { ...store.data(), ["id"]: currentID };
+  //           allStores.push(appObj);
+  //         });
+  //         allStores = allStores.filter((store) => store.province === province);
+  //         setStores(allStores);
+  //       });
+  //   }
+  // };
 
   useEffect(() => {
     const getData = async () => {
@@ -78,8 +78,8 @@ const HomeScreen = () => {
             setStores(allStores);
           });
       } else {
-        const { province } = doc.data();
-        setProvince(province);
+        const { addresses } = doc.data();
+        setProvince(addresses[0].province);
 
         let allStores = [];
         db.collection("stores")
@@ -91,7 +91,7 @@ const HomeScreen = () => {
               allStores.push(appObj);
             });
             allStores = allStores.filter(
-              (store) => store.province === province
+              (store) => store.province === addresses[0].province
             );
             setStores(allStores);
           });
@@ -103,7 +103,11 @@ const HomeScreen = () => {
   return (
     <>
       {stores.length === 0 ? (
-        <Loader />
+        <Col md={6} lg={6} className="mx-auto">
+          <Message variant="danger">
+            <p className="text-center">Sorry, no store available near you!</p>
+          </Message>
+        </Col>
       ) : (
         <>
           <Row className="mb-1">

@@ -27,7 +27,7 @@ const Header = () => {
               ) : (
                 ""
               )}
-              <Nav.Link href="/bag">Bag</Nav.Link>
+              {user ? <Nav.Link href="/bag">Bag</Nav.Link> : undefined}
               {user ? (
                 <NavDropdown title="Account" id="username">
                   <LinkContainer to="/profile">

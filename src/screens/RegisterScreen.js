@@ -22,6 +22,7 @@ const RegisterScreen = () => {
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [address, setAddress] = useState("");
+  const [addresses, setAddresses] = useState([]);
   const [shippingInstruction, setShippingInstruction] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState(null);
@@ -40,17 +41,21 @@ const RegisterScreen = () => {
     shippingInstruction === "";
 
   async function addToUsersCollection(result) {
+    addresses.push({
+      address,
+      city,
+      country,
+      postalCode,
+      province,
+    });
+
     const res = await db.collection("customers").doc(result.user.uid).set({
       uid: result.user.uid,
-      fullName: fullName,
-      mobileNumber: mobileNumber,
-      email: email,
-      country: country,
-      province: province,
-      city: city,
-      postalCode: postalCode,
-      address: address,
-      shippingInstruction: shippingInstruction,
+      fullName,
+      mobileNumber,
+      email,
+      addresses,
+      shippingInstruction,
     });
   }
 

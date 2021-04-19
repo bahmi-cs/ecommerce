@@ -15,6 +15,7 @@ const ProfileScreen = () => {
   const [fullName, setFullName] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [addresses, setAddresses] = useState([]);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,12 +29,12 @@ const ProfileScreen = () => {
     if (!doc.exists) {
       console.log("No such document!");
     } else {
-      const { fullName, email, mobileNumber, address } = doc.data();
+      const { fullName, email, mobileNumber, addresses } = doc.data();
       setFullName(fullName);
       setMobileNumber(mobileNumber);
       setEmail(email);
-      setAddress(address);
-      console.log("Document data:", doc.data());
+      setAddresses(addresses);
+      // console.log("Document data:", doc.data());
     }
   };
 
@@ -115,7 +116,7 @@ const ProfileScreen = () => {
                 <Form.Control
                   type="text"
                   placeholder="Address"
-                  value={address}
+                  value={addresses[0]?.address}
                   onChange={(e) => setAddress(e.target.value)}
                 ></Form.Control>
               </Form.Group>
