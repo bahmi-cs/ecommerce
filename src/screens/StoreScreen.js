@@ -12,7 +12,10 @@ const StoreScreen = ({ match }) => {
   const [storeItems, setStoreItems] = useState([]);
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState(false);
   const [error, setError] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   const storeId = match.params.id;
   // console.log(storeId);
@@ -54,13 +57,38 @@ const StoreScreen = ({ match }) => {
     getStoreItems();
   }, []);
 
+  const priceFromTo = (from, to) => {
+    let filteredItems = storeItems?.filter(
+      (item) => item.price >= Number(from) && item.price <= Number(to)
+    );
+    console.log(filteredItems);
+    setStoreItems(filteredItems);
+    setFilter(() => !filter);
+  };
+
+  const sortByLowToHigh = () => {
+    let lowToHigh = storeItems?.sort(
+      (a, b) => Number(a.price) - Number(b.price)
+    );
+    setStoreItems(lowToHigh);
+    setFilter(() => !filter);
+  };
+
+  const sortByHighToLow = () => {
+    let highToLow = storeItems?.sort(
+      (a, b) => Number(b.price) - Number(a.price)
+    );
+    setStoreItems(highToLow);
+    setFilter(() => !filter);
+  };
+
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
         <Row>
-          <Col md={3}>
+          <Col md={4}>
             <Card className="p-3 rounded">
               <Card.Img src={store.storeLogo} valiant="top" />
 
@@ -77,21 +105,55 @@ const StoreScreen = ({ match }) => {
                   <br />
                   Price
                   <Form>
-                    <Row className="p-2">
+                    <Row className="">
                       <Col>
-                        <Form.Control placeholder="From" />
+                        <Form.Control
+                          type="text"
+                          placeholder="From"
+                          value={from}
+                          onChange={(e) => setFrom(e.target.value)}
+                        />
                       </Col>
                       <Col>
-                        <Form.Control placeholder="To" />
+                        <Form.Control
+                          type="text"
+                          value={to}
+                          onChange={(e) => setTo(e.target.value)}
+                          placeholder="To"
+                        />
+                      </Col>
+                      <Col>
+                        <Button
+                          className="mt-1"
+                          variant="outline-primary"
+                          size="sm"
+                          onClick={() => {
+                            priceFromTo(from, to);
+                          }}
+                        >
+                          Go
+                        </Button>
                       </Col>
                     </Row>
                   </Form>
                   Sort <br />
                   <div className="d-flex justify-content-between p-2">
-                    <Button variant="outline-primary" size="sm">
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      onClick={() => {
+                        sortByLowToHigh();
+                      }}
+                    >
                       Low to High
                     </Button>
-                    <Button variant="outline-primary" size="sm">
+                    <Button
+                      variant="outline-primary"
+                      size="sm"
+                      onClick={() => {
+                        sortByHighToLow();
+                      }}
+                    >
                       High to Low
                     </Button>
                   </div>
@@ -99,7 +161,7 @@ const StoreScreen = ({ match }) => {
               </Card.Body>
             </Card>
           </Col>
-          <Col md={9}>
+          <Col md={8}>
             {storeItems?.length === 0 ? (
               <Message variant="info">
                 The store is empty <Link to="/">Go Back</Link>
