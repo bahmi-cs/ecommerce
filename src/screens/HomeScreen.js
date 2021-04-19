@@ -20,7 +20,7 @@ const HomeScreen = () => {
   const [province, setProvince] = useState("");
   const [stores, setStores] = useState([]);
   const [message, setMessage] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   // const getUser = async () => {
@@ -61,6 +61,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       const userRef = db.collection("customers").doc(user?.uid);
       const doc = await userRef.get();
       if (!doc.exists) {
@@ -96,13 +97,16 @@ const HomeScreen = () => {
             setStores(allStores);
           });
       }
+      setLoading(false);
     };
     getData();
   }, []);
 
   return (
     <>
-      {stores.length === 0 ? (
+      {loading ? (
+        <Loader />
+      ) : stores.length === 0 ? (
         <Col md={6} lg={6} className="mx-auto">
           <Message variant="danger">
             <p className="text-center">Sorry, no store available near you!</p>
