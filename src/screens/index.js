@@ -8,3 +8,4 @@ export { default as UpdatesScreen } from "./UpdatesScreen";
 export { default as ItemScreen } from "./ItemScreen";
 export { default as OrderScreen } from "./OrderScreen";
 export { default as StoreScreen } from "./StoreScreen";
+export { default as ForgotPasswordScreen } from "./ForgotPasswordScreen";

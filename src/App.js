@@ -13,6 +13,7 @@ import {
   UpdatesScreen,
   OrderScreen,
   StoreScreen,
+  ForgotPasswordScreen,
 } from "./screens";
 import * as ROUTES from "./constants/routes";
 import { IsUserRedirect, ProtectedRoute } from "./helpers/routes";
@@ -41,10 +42,18 @@ function App() {
             >
               <RegisterScreen />
             </IsUserRedirect>
-            <Route path="/bag/:id?" component={BagScreen} exact />
+            {/* <Route path="/bag/:id?" component={BagScreen} exact /> */}
+            <ProtectedRoute user={user} path="/bag/:id?">
+              <BagScreen />
+            </ProtectedRoute>
             <Route path="/product/:id?" component={ItemScreen} exact />
             <Route path="/store/:id?" component={StoreScreen} exact />
             <Route path="/profile" component={ProfileScreen} exact />
+            <Route
+              path="/forgotpassword"
+              component={ForgotPasswordScreen}
+              exact
+            />
 
             <ProtectedRoute user={user} path={ROUTES.BROWSE}>
               <BrowseScreen />

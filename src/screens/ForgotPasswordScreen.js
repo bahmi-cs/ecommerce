@@ -5,36 +5,36 @@ import { Message, FormContainer } from "../components";
 import { FirebaseContext } from "../context/firebase";
 import * as ROUTES from "../constants/routes";
 
-const LoginScreen = () => {
+const ForgotPasswordScreen = () => {
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const isInvalid = password === "" || email === "";
+  const isInvalid = email === "";
 
   const submitHandler = (e) => {
     e.preventDefault();
 
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
+      .sendPasswordResetEmail(email)
       .then(() => {
-        window.location.href = "/";
+        setError("");
+        setMessage("An email has been sent to reset the password!");
       })
       .catch((error) => {
         setEmail("");
-        setPassword("");
+        setMessage("");
         setError(error.message);
       });
   };
 
-  console.log(process.env.PUBLIC_URL);
-
   return (
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Reset Password</h1>
+      {message && <Message variant="success">{message}</Message>}
       {error && <Message variant="danger">{error}</Message>}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="email">
@@ -47,23 +47,8 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
-        </Form.Group>
-
-        <Row className="pb-1">
-          <Col>
-            <Link to={"/forgotpassword"}> Forgot password?</Link>
-          </Col>
-        </Row>
         <Button disabled={isInvalid} type="submit" variant="primary">
-          Sign In
+          Submit
         </Button>
       </Form>
 
@@ -77,4 +62,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default ForgotPasswordScreen;
