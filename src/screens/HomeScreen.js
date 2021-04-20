@@ -23,42 +23,6 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // const getUser = async () => {
-  //   const userRef = db.collection("customers").doc(user?.uid);
-  //   const doc = await userRef.get();
-  //   if (!doc.exists) {
-  //     console.log("No such document!");
-
-  //     const allStores = [];
-  //     db.collection("stores")
-  //       .get()
-  //       .then((snapshot) => {
-  //         snapshot.docs.forEach((store) => {
-  //           let currentID = store.id;
-  //           let appObj = { ...store.data(), ["id"]: currentID };
-  //           allStores.push(appObj);
-  //         });
-  //         setStores(allStores);
-  //       });
-  //   } else {
-  //     const { province } = doc.data();
-  //     setProvince(province);
-
-  //     let allStores = [];
-  //     db.collection("stores")
-  //       .get()
-  //       .then((snapshot) => {
-  //         snapshot.docs.forEach((store) => {
-  //           let currentID = store.id;
-  //           let appObj = { ...store.data(), ["id"]: currentID };
-  //           allStores.push(appObj);
-  //         });
-  //         allStores = allStores.filter((store) => store.province === province);
-  //         setStores(allStores);
-  //       });
-  //   }
-  // };
-
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
@@ -108,8 +72,10 @@ const HomeScreen = () => {
         <Loader />
       ) : stores.length === 0 ? (
         <Col md={6} lg={6} className="mx-auto">
-          <Message variant="danger">
-            <p className="text-center">Sorry, no store available near you!</p>
+          <Message variant="info">
+            <div className="text-center">
+              Sorry, no store available near you!
+            </div>
           </Message>
         </Col>
       ) : (

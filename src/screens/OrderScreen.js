@@ -1,78 +1,55 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
-import { Message } from "../components";
-import sampleImage from "../assets/img/airpods.jpg";
+import { Message, Loader } from "../components";
+import { FirebaseContext } from "../context/firebase";
+import { useAuthListener } from "../hooks";
 
 const OrderScreen = () => {
-  const orderItems = [
-    {
-      date: "Wednesday Feb 25, 2021",
-      orderId: "662287-271222-5278189",
-      name: "Airpods Wireless Bluetooth Headphones",
-      itemId: "662287-271222",
-      barcode: "6622872712225278189",
-      condition: "New",
-      seller: "Hudson Store",
-      sellerAddress: "Hudson Store",
-      storeId: "298910",
-      status: "On Delivery",
-      qty: 1,
-      countInStock: 10,
-      subtotal: 15.41,
-      shipping: 2.0,
-    },
-    {
-      date: "Wednesday Feb 25, 2021",
-      orderId: "662287-271222-5278189",
-      name: "Airpods Wireless Bluetooth Headphones",
-      itemId: "662287-271222",
-      barcode: "6622872712225278189",
-      condition: "New",
-      seller: "Hudson Store",
-      sellerAddress: "Hudson Store",
-      storeId: "298910",
-      status: "On Delivery",
-      qty: 1,
-      countInStock: 10,
-      subtotal: 15.41,
-      shipping: 2.0,
-    },
-    {
-      date: "Wednesday Feb 25, 2021",
-      orderId: "662287-271222-5278189",
-      name: "Airpods Wireless Bluetooth Headphones",
-      itemId: "662287-271222",
-      barcode: "6622872712225278189",
-      condition: "New",
-      seller: "Hudson Store",
-      sellerAddress: "Hudson Store",
-      storeId: "298910",
-      status: "On Delivery",
-      qty: 1,
-      countInStock: 10,
-      subtotal: 15.41,
-      shipping: 2.0,
-    },
-  ];
+  const { firebase } = useContext(FirebaseContext);
+  const db = firebase.firestore();
+  const { user } = useAuthListener();
+
+  const [orderItems, setOrderItems] = useState([]);
+  const [message, setMessage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const getItems = async () => {
+      await db
+        .collection("orders")
+        .where("customerID", "==", user.uid)
+        .get()
+        .then((querySnapshot) => {
+          setOrderItems(querySnapshot.docs.map((doc) => doc.data()));
+          console.log(querySnapshot.docs.map((doc) => doc.data()));
+        });
+    };
+    getItems();
+  }, []);
 
   return (
     <Row>
       <Col>
         <h1>Orders</h1>
         {orderItems.length === 0 ? (
-          <Message variant="info">
-            Your order is empty <Link to="/">Go Back</Link>
-          </Message>
+          <Col md={6} lg={6} className="mx-auto">
+            <Message variant="info">
+              <div className="text-center">
+                Your order is empty <Link to="/">Go Back</Link>
+              </div>
+            </Message>
+          </Col>
         ) : (
           <ListGroup variant="flush">
             {orderItems.map((item) => (
-              <Card className="mb-3" key={item.id}>
+              <Card className="mb-3" key={item.itemID}>
                 <Row className="d-flex align-items-center">
                   <Col md={2}>
                     <Image
                       className="pl-2"
-                      src={sampleImage}
+                      src={item.imagesUrl[0]}
                       alt={item.name}
                       fluid
                       rounded
@@ -85,45 +62,44 @@ const OrderScreen = () => {
                     {/* <h5> {item.name}</h5> */}
                     <div>
                       <strong>Item ID: </strong>
-                      {item.itemId}
+                      {item.itemID}
                     </div>
                     <div>
                       <strong>Barcode: </strong>
-                      {item.itemId}
+                      {item.item_barcode}
                     </div>
                     <div>
                       <strong>Condition: </strong>
-                      {item.condition}
+                      {item.item_condition}
                     </div>
                     <div>
                       <strong>Quantity: </strong>
-                      {item.qty}
+                      {item.item_quantity}
                     </div>
-                    <hr class="hr-primary" />
                   </Col>
                   <Col md={3}>
-                    <div class="row">
-                      <div class="col-md-12 d-flex my-1">
+                    <div className="row">
+                      <div className="col-md-12 d-flex my-1">
                         <strong>Status: </strong>
-                        <div class="ml-auto">{item.status}</div>
+                        <div className="ml-auto">{item.item_status}</div>
                       </div>
                     </div>
                     <Card className="mb-2 mt-1">
                       <ListGroup variant="flush">
                         <ListGroup.Item>
                           <Row>
-                            <div class="col-md-12 d-flex">
+                            <div className="col-md-12 d-flex">
                               <strong className="mr-1">Seller: </strong>{" "}
                               {item.seller} <br />
-                              {"3146 Orleans Rd"}
+                              {/* {"3146 Orleans Rd"}
                               <br />
                               {"Mississauga, ON"}
                               <br />
-                              {"L5L 5L4"}
+                              {"L5L 5L4"} */}
                             </div>
                           </Row>
-                          <strong className="mr-1">Store ID: </strong>{" "}
-                          {item.storeId}
+                          {/* <strong className="mr-1">Store ID: </strong>{" "}
+                          {item.store_id} */}
                         </ListGroup.Item>
                       </ListGroup>
                     </Card>
@@ -133,17 +109,26 @@ const OrderScreen = () => {
                       <ListGroup variant="flush">
                         <strong className="pl-1">Sales Proceeds </strong>
                         <ListGroup.Item>
-                          <div class="col-md-12 d-flex">
+                          <div className="col-md-12 d-flex">
                             <strong>Subtotal: </strong>
-                            <div class="ml-auto">
+                            <div className="ml-auto">
                               CAD$
-                              {item.subtotal.toFixed(2)}
+                              {(
+                                Number(item.item_price) *
+                                Number(item.item_quantity)
+                              ).toFixed(2)}
                             </div>
                           </div>
-                          <div class="d-flex justify-content-between">
+                          <div className="d-flex justify-content-between">
                             <div className="ml-3">Shipping:</div>
                             <div className="mr-3">
-                              CAD${item.shipping.toFixed(2)}
+                              CAD$
+                              {(
+                                Number(item.item_price) *
+                                Number(item.item_quantity)
+                              ).toFixed(2) > 35
+                                ? 0
+                                : 10}
                             </div>
                           </div>
                           <hr
@@ -151,10 +136,10 @@ const OrderScreen = () => {
                               borderTop: "2px solid #000000",
                             }}
                           />
-                          <div class="col-md-12 d-flex mt-2">
+                          <div className="col-md-12 d-flex mt-2">
                             <h4>Total: </h4>
-                            <div class="ml-auto">
-                              CAD${(item.subtotal + item.shipping).toFixed(2)}
+                            <div className="ml-auto">
+                              {/* CAD${(item.subtotal + item.shipping).toFixed(2)} */}
                             </div>
                           </div>
                         </ListGroup.Item>

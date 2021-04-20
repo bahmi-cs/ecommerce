@@ -88,7 +88,7 @@ const StoreScreen = ({ match }) => {
         <Loader />
       ) : (
         <Row>
-          <Col md={4}>
+          <Col md={3}>
             <Card className="p-3 rounded">
               <Card.Img src={store.storeLogo} valiant="top" />
 
@@ -105,12 +105,13 @@ const StoreScreen = ({ match }) => {
                   <br />
                   Price
                   <Form>
-                    <Row className="">
+                    <Row className="mb-2">
                       <Col>
                         <Form.Control
                           type="text"
                           placeholder="From"
                           value={from}
+                          size="sm"
                           onChange={(e) => setFrom(e.target.value)}
                         />
                       </Col>
@@ -118,13 +119,13 @@ const StoreScreen = ({ match }) => {
                         <Form.Control
                           type="text"
                           value={to}
+                          size="sm"
                           onChange={(e) => setTo(e.target.value)}
                           placeholder="To"
                         />
                       </Col>
                       <Col>
                         <Button
-                          className="mt-1"
                           variant="outline-primary"
                           size="sm"
                           onClick={() => {
@@ -161,7 +162,7 @@ const StoreScreen = ({ match }) => {
               </Card.Body>
             </Card>
           </Col>
-          <Col md={8}>
+          <Col md={9}>
             {storeItems?.length === 0 ? (
               <Message variant="info">
                 The store is empty <Link to="/">Go Back</Link>
