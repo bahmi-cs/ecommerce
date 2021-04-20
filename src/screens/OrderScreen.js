@@ -17,13 +17,23 @@ const OrderScreen = () => {
 
   useEffect(() => {
     const getItems = async () => {
+      const allOrders = [];
+
       await db
         .collection("orders")
         .where("customerID", "==", user.uid)
         .get()
         .then((querySnapshot) => {
-          setOrderItems(querySnapshot.docs.map((doc) => doc.data()));
-          console.log(querySnapshot.docs.map((doc) => doc.data()));
+          querySnapshot.docs.forEach((order) => {
+            let currentID = order.id;
+            let appObj = { ...order.data(), ["id"]: currentID };
+            allOrders.push(appObj);
+          });
+          setOrderItems(allOrders);
+          console.log(allOrders);
+
+          // setOrderItems(querySnapshot.docs.map((doc) => doc.data()));
+          // console.log(querySnapshot.docs.map((doc) => doc.data()));
         });
     };
     getItems();
@@ -58,7 +68,7 @@ const OrderScreen = () => {
 
                   <Col md={4}>
                     <div className="mb-1">{item.date}</div>
-                    <h4 className="mb-1">Order # {item.orderId}</h4>
+                    <h5 className="mb-1">Order # {item.id}</h5>
                     {/* <h5> {item.name}</h5> */}
                     <div>
                       <strong>Item ID: </strong>
@@ -139,7 +149,23 @@ const OrderScreen = () => {
                           <div className="col-md-12 d-flex mt-2">
                             <h4>Total: </h4>
                             <div className="ml-auto">
-                              {/* CAD${(item.subtotal + item.shipping).toFixed(2)} */}
+                              CAD$
+                              {Number(
+                                Number(
+                                  (
+                                    Number(item.item_price) *
+                                    Number(item.item_quantity)
+                                  ).toFixed(2)
+                                ) > 35
+                                  ? 0
+                                  : 10
+                              ) +
+                                Number(
+                                  (
+                                    Number(item.item_price) *
+                                    Number(item.item_quantity)
+                                  ).toFixed(2)
+                                )}
                             </div>
                           </div>
                         </ListGroup.Item>
