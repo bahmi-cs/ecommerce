@@ -47,7 +47,11 @@ const ForgotPasswordScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button disabled={isInvalid} type="submit" variant="primary">
+        <Button
+          disabled={isInvalid}
+          type="submit"
+          variant="primary rounded-pill"
+        >
           Submit
         </Button>
       </Form>

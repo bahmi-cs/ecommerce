@@ -25,7 +25,7 @@ let yyyy = today.getFullYear();
 
 today = mm + "/" + dd + "/" + yyyy;
 
-const BagScreen = ({ match, location }) => {
+const BagScreen = () => {
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
   const db = firebase.firestore();
@@ -36,7 +36,7 @@ const BagScreen = ({ match, location }) => {
   const [{ isPending }] = usePayPalScriptReducer();
   const [amount, setAmount] = useState(5);
   const [orderID, setOrderID] = useState(false);
-  const productId = match.params.id;
+  // const productId = match.params.id;
 
   // console.log(productId, qty);
 

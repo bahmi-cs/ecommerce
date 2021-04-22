@@ -26,7 +26,9 @@ const HomeScreen = () => {
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
-      const userRef = db.collection("customers").doc(user?.uid);
+      const userRef = db
+        .collection("customers")
+        .doc(user?.uid.substring(0, 20));
       const doc = await userRef.get();
       if (!doc.exists) {
         console.log("No such user!");

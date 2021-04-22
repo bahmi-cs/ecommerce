@@ -42,15 +42,14 @@ function App() {
             >
               <RegisterScreen />
             </IsUserRedirect>
-            {/* <Route path="/bag/:id?" component={BagScreen} exact /> */}
-            <ProtectedRoute user={user} path="/bag/:id?">
+            <ProtectedRoute user={user} path="/bag">
               <BagScreen />
             </ProtectedRoute>
             <Route path="/product/:id?" component={ItemScreen} exact />
             <Route path="/store/:id?" component={StoreScreen} exact />
             <Route path="/profile" component={ProfileScreen} exact />
             <Route
-              path="/forgotpassword"
+              path="/resetpassword"
               component={ForgotPasswordScreen}
               exact
             />

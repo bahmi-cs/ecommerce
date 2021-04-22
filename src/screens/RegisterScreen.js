@@ -23,7 +23,7 @@ const RegisterScreen = () => {
   const [postalCode, setPostalCode] = useState("");
   const [address, setAddress] = useState("");
   const [addresses, setAddresses] = useState([]);
-  const [shippingInstruction, setShippingInstruction] = useState("");
+  const [shippingInstructions, setShippingInstructions] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState(null);
 
@@ -38,7 +38,7 @@ const RegisterScreen = () => {
     city === "" ||
     postalCode === "" ||
     address === "" ||
-    shippingInstruction === "";
+    shippingInstructions === "";
 
   async function addToUsersCollection(result) {
     addresses.push({
@@ -49,14 +49,17 @@ const RegisterScreen = () => {
       province,
     });
 
-    const res = await db.collection("customers").doc(result.user.uid).set({
-      uid: result.user.uid,
-      fullName,
-      mobileNumber,
-      email,
-      addresses,
-      shippingInstruction,
-    });
+    const res = await db
+      .collection("customers")
+      .doc(result.user.uid.substring(0, 20))
+      // .doc(btoa(Math.random()).slice(0, 20))
+      .set({
+        fullName,
+        mobileNumber,
+        email,
+        addresses,
+        shippingInstructions,
+      });
   }
 
   const submitHandler = (e) => {
@@ -73,6 +76,7 @@ const RegisterScreen = () => {
           result.user.sendEmailVerification();
           result.user.updateProfile({
             displayName: fullName,
+            phoneNumber: mobileNumber,
           });
           addToUsersCollection(result);
         })
@@ -221,14 +225,14 @@ const RegisterScreen = () => {
                 </Form.Group>
               </Col>
               <Col xs={12} md={6}>
-                <Form.Group controlId="shippingInstruction">
-                  <Form.Label>Shipping Instruction</Form.Label>
+                <Form.Group controlId="shippingInstructions">
+                  <Form.Label>Shipping Instructions</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={2}
                     placeholder="E.g: Buzzer Code - leave it at the door"
-                    value={shippingInstruction}
-                    onChange={(e) => setShippingInstruction(e.target.value)}
+                    value={shippingInstructions}
+                    onChange={(e) => setShippingInstructions(e.target.value)}
                   ></Form.Control>
                 </Form.Group>
               </Col>
@@ -237,7 +241,7 @@ const RegisterScreen = () => {
               disabled={isInvalid}
               type="submit"
               className="float-right"
-              variant="primary"
+              variant="primary rounded-pill"
             >
               Create
             </Button>
