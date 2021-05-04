@@ -63,7 +63,10 @@ const ProfileScreen = () => {
           .updateProfile({
             phoneNumber: mobileNumber,
           })
-          .then(() => console.log('Phone number updated'))
+          .then(() => {
+            console.log('Phone number updated');
+            window.location.href = '/profile';
+          })
           .catch((error) => console.log(error));
 
         // user
@@ -80,6 +83,7 @@ const ProfileScreen = () => {
       city,
       country,
       postalCode,
+      province,
     });
 
     await db
@@ -89,7 +93,8 @@ const ProfileScreen = () => {
         addresses,
       })
       .then(() => {
-        setMessage('User profile updated');
+        setMessage('Added new address!');
+        window.location.href = '/profile';
       })
       .catch((error) => {
         setError(error.message);
@@ -143,6 +148,7 @@ const ProfileScreen = () => {
       })
       .then(() => {
         setMessage('User profile updated');
+        window.location.href = '/profile';
       })
       .catch((error) => {
         setError(error.message);

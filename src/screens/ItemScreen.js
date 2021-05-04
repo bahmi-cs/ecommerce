@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Row,
   Col,
@@ -7,37 +7,39 @@ import {
   Card,
   Button,
   Form,
-} from "react-bootstrap";
-import { Loader, Message } from "../components";
-import { Link, useHistory } from "react-router-dom";
-import { useAuthListener } from "../hooks";
-import { FirebaseContext } from "../context/firebase";
+} from 'react-bootstrap';
+import { Loader, Message } from '../components';
+import { Link, useHistory } from 'react-router-dom';
+import { useAuthListener } from '../hooks';
+import { FirebaseContext } from '../context/firebase';
+import { CartContext } from '../context/cart';
 
 const ItemScreen = ({ match }) => {
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
+  const [value, setValue] = useContext(CartContext);
   const db = firebase.firestore();
   const { user } = useAuthListener();
 
   const [qty, setQty] = useState(1);
-  const [error, setError] = useState("");
-  const [storeName, setStoreName] = useState("");
+  const [error, setError] = useState('');
+  const [storeName, setStoreName] = useState('');
   const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-  const [images, setImages] = useState("");
+  const [images, setImages] = useState('');
 
   const productId = match.params.id;
 
   const getStore = async (store_id) => {
-    const storeRef = db.collection("stores").doc(store_id);
+    const storeRef = db.collection('stores').doc(store_id);
     const doc = await storeRef.get();
     if (!doc.exists) {
-      console.log("No such document!");
+      console.log('No such document!');
     } else {
       const { storeName } = doc.data();
       setStoreName(storeName);
-      console.log("Document data:", doc.data());
+      console.log('Document data:', doc.data());
     }
   };
 
@@ -46,7 +48,7 @@ const ItemScreen = ({ match }) => {
       let item = {};
 
       await db
-        .collection("items")
+        .collection('items')
         .doc(productId)
         .get()
         .then((snapshot) => {
@@ -64,6 +66,8 @@ const ItemScreen = ({ match }) => {
 
   const addToCartHandler = () => {
     let cartCopy = [...cartItems];
+    console.log(value);
+    // let cartCopy = [...value];
 
     let existingItem = cartCopy.find(
       (cartItem) => cartItem.itemId === product.itemId
@@ -77,23 +81,27 @@ const ItemScreen = ({ match }) => {
       cartCopy.push(product);
     }
 
-    setCartItems(cartCopy);
+    console.log(`cartCopy`, cartCopy);
+    // setCartItems(cartCopy);
+    setValue(() => 'cartCopy');
 
     let stringCart = JSON.stringify(cartCopy);
-    localStorage.setItem("cart", stringCart);
+    localStorage.setItem('cart', stringCart);
 
-    history.push(`/bag`);
+    console.log(value);
+
+    // history.push(`/bag`);
   };
 
   return (
     <>
-      <Link className="btn btn-primary my-3" to="/">
+      <Link className='btn btn-primary my-3' to='/'>
         Go Back
       </Link>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant="danger">{error}</Message>
+        <Message variant='danger'>{error}</Message>
       ) : (
         <>
           <Row>
@@ -101,7 +109,7 @@ const ItemScreen = ({ match }) => {
               <Image src={images} alt={product.title} fluid />
             </Col>
             <Col md={4}>
-              <ListGroup variant="flush">
+              <ListGroup variant='flush'>
                 <ListGroup.Item>
                   <h3>{product.title}</h3>
                 </ListGroup.Item>
@@ -115,9 +123,9 @@ const ItemScreen = ({ match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <strong>Price:</strong> <del>CAD${product.price}</del>
-                  <strong className="ml-2" style={{ color: "red" }}>
+                  <strong className='ml-2' style={{ color: 'red' }}>
                     CAD${product.discountedPrice}
-                  </strong>{" "}
+                  </strong>{' '}
                   <br />
                   (Including Taxes and Fees)
                 </ListGroup.Item>
@@ -134,13 +142,13 @@ const ItemScreen = ({ match }) => {
             </Col>
             <Col md={3}>
               <Card>
-                <ListGroup variant="flush">
+                <ListGroup variant='flush'>
                   <ListGroup.Item>
-                    <strong>Shiping:</strong> <br /> {"Same-day delivery"}
+                    <strong>Shiping:</strong> <br /> {'Same-day delivery'}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <strong>Returns:</strong> <br />{" "}
-                    {"Please, contact seller for more info"}
+                    <strong>Returns:</strong> <br />{' '}
+                    {'Please, contact seller for more info'}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <strong>Condition:</strong> <br /> {product.condition}
@@ -151,7 +159,7 @@ const ItemScreen = ({ match }) => {
                         <Col>Quantity</Col>
                         <Col>
                           <Form.Control
-                            as="select"
+                            as='select'
                             value={qty}
                             onChange={(e) => {
                               setQty(e.target.value);
@@ -171,8 +179,8 @@ const ItemScreen = ({ match }) => {
                   <ListGroup.Item>
                     <Button
                       onClick={addToCartHandler}
-                      className="btn-block"
-                      type="button"
+                      className='btn-block'
+                      type='button'
                       disabled={product.quantity === 0}
                     >
                       Add To Bag
