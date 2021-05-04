@@ -20,9 +20,7 @@ ReactDOM.render(
   <>
     <FirebaseContext.Provider value={{ firebase }}>
       <PayPalScriptProvider options={initialOptions}>
-        
-          <App />
-        
+        <App />
       </PayPalScriptProvider>
     </FirebaseContext.Provider>
   </>,

@@ -18,18 +18,18 @@ import {
 import * as ROUTES from './constants/routes';
 import { IsUserRedirect, ProtectedRoute } from './helpers/routes';
 import { useAuthListener } from './hooks';
-import { CartContext } from './context/cart';
+import { CartContextProvider } from './context/cart';
 
 function App() {
   const { user } = useAuthListener();
   const [value, setValue] = useState('hola');
 
   return (
-    <CartContext.Provider value={[value, setValue]}>
-      <>
+    <>
+      <CartContextProvider>
         <Router>
           <Header />
-          <main className='py-3'>
+          <main className="py-3">
             <Container>
               <IsUserRedirect
                 user={user}
@@ -45,14 +45,14 @@ function App() {
               >
                 <RegisterScreen />
               </IsUserRedirect>
-              <ProtectedRoute user={user} path='/bag'>
+              <ProtectedRoute user={user} path="/bag">
                 <BagScreen />
               </ProtectedRoute>
-              <Route path='/product/:id?' component={ItemScreen} exact />
-              <Route path='/store/:id?' component={StoreScreen} exact />
-              <Route path='/profile' component={ProfileScreen} exact />
+              <Route path="/product/:id?" component={ItemScreen} exact />
+              <Route path="/store/:id?" component={StoreScreen} exact />
+              <Route path="/profile" component={ProfileScreen} exact />
               <Route
-                path='/resetpassword'
+                path="/resetpassword"
                 component={ForgotPasswordScreen}
                 exact
               />
@@ -66,13 +66,13 @@ function App() {
               <ProtectedRoute user={user} path={ROUTES.ORDERS}>
                 <OrderScreen />
               </ProtectedRoute>
-              <Route path='/' component={HomeScreen} exact />
+              <Route path="/" component={HomeScreen} exact />
             </Container>
           </main>
           <Footer />
         </Router>
-      </>
-    </CartContext.Provider>
+      </CartContextProvider>
+    </>
   );
 }
 

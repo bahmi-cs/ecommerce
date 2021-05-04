@@ -17,7 +17,7 @@ import { CartContext } from '../context/cart';
 const ItemScreen = ({ match }) => {
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
-  const [value, setValue] = useContext(CartContext);
+  const { value, newValue } = useContext(CartContext);
   const db = firebase.firestore();
   const { user } = useAuthListener();
 
@@ -83,25 +83,27 @@ const ItemScreen = ({ match }) => {
 
     console.log(`cartCopy`, cartCopy);
     // setCartItems(cartCopy);
-    setValue(() => 'cartCopy');
+    // setValue('cartCopy');
 
     let stringCart = JSON.stringify(cartCopy);
     localStorage.setItem('cart', stringCart);
 
+    newValue();
+
     console.log(value);
 
-    // history.push(`/bag`);
+    history.push(`/bag`);
   };
 
   return (
     <>
-      <Link className='btn btn-primary my-3' to='/'>
+      <Link className="btn btn-primary my-3" to="/">
         Go Back
       </Link>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>{error}</Message>
+        <Message variant="danger">{error}</Message>
       ) : (
         <>
           <Row>
@@ -109,7 +111,7 @@ const ItemScreen = ({ match }) => {
               <Image src={images} alt={product.title} fluid />
             </Col>
             <Col md={4}>
-              <ListGroup variant='flush'>
+              <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>{product.title}</h3>
                 </ListGroup.Item>
@@ -123,7 +125,7 @@ const ItemScreen = ({ match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <strong>Price:</strong> <del>CAD${product.price}</del>
-                  <strong className='ml-2' style={{ color: 'red' }}>
+                  <strong className="ml-2" style={{ color: 'red' }}>
                     CAD${product.discountedPrice}
                   </strong>{' '}
                   <br />
@@ -142,7 +144,7 @@ const ItemScreen = ({ match }) => {
             </Col>
             <Col md={3}>
               <Card>
-                <ListGroup variant='flush'>
+                <ListGroup variant="flush">
                   <ListGroup.Item>
                     <strong>Shiping:</strong> <br /> {'Same-day delivery'}
                   </ListGroup.Item>
@@ -159,7 +161,7 @@ const ItemScreen = ({ match }) => {
                         <Col>Quantity</Col>
                         <Col>
                           <Form.Control
-                            as='select'
+                            as="select"
                             value={qty}
                             onChange={(e) => {
                               setQty(e.target.value);
@@ -179,8 +181,8 @@ const ItemScreen = ({ match }) => {
                   <ListGroup.Item>
                     <Button
                       onClick={addToCartHandler}
-                      className='btn-block'
-                      type='button'
+                      className="btn-block"
+                      type="button"
                       disabled={product.quantity === 0}
                     >
                       Add To Bag
