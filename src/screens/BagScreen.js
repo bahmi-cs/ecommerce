@@ -17,6 +17,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useAuthListener } from '../hooks';
 import { FirebaseContext } from '../context/firebase';
 import { Message, Loader } from '../components';
+import { CartContext } from '../context/cart';
 
 let today = new Date();
 let dd = String(today.getDate()).padStart(2, '0');
@@ -28,6 +29,7 @@ today = mm + '/' + dd + '/' + yyyy;
 const BagScreen = () => {
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
+  const { value, newValue } = useContext(CartContext);
   const db = firebase.firestore();
   const { user } = useAuthListener();
 
@@ -47,6 +49,7 @@ const BagScreen = () => {
   // console.log(productId, qty);
 
   let localCart = localStorage.getItem('cart');
+  console.log(value);
 
   const createOrder = (data, actions) => {
     return actions.order
@@ -131,14 +134,14 @@ const BagScreen = () => {
         <h1>Bag</h1>
 
         {cartItems.length === 0 ? (
-          <Message variant='info'>
-            Your cart is empty <Link to='/'>Go Back</Link>
+          <Message variant="info">
+            Your cart is empty <Link to="/">Go Back</Link>
           </Message>
         ) : (
-          <ListGroup variant='flush'>
+          <ListGroup variant="flush">
             {cartItems.map((item) => (
-              <Card className='mb-3' key={item.id}>
-                <Row className='d-flex align-items-center'>
+              <Card className="mb-3" key={item.id}>
+                <Row className="d-flex align-items-center">
                   <Col md={3}>
                     <Image
                       src={item.imagesUrl[0]}
@@ -153,10 +156,10 @@ const BagScreen = () => {
                       <Link to={`/product/${item.id}`}>{item.title}</Link>
                     </h6>
                     {/* <br /> */}
-                    <div className=''>
+                    <div className="">
                       <strong>Price: </strong>CAD${item.price}
                     </div>
-                    <div className=''>
+                    <div className="">
                       <strong>Category: </strong>
                       {item.category}
                     </div>
@@ -167,7 +170,7 @@ const BagScreen = () => {
                   </Col>
 
                   <Col md={2}>
-                    <Form.Control as='select' defaultValue={item.quantity}>
+                    <Form.Control as="select" defaultValue={item.quantity}>
                       {<option>{item.quantity}</option>}
                       {/* {[...Array(item.quantity).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
@@ -178,11 +181,11 @@ const BagScreen = () => {
                   </Col>
                   <Col md={2}>
                     <Button
-                      type='button'
-                      variant='light'
+                      type="button"
+                      variant="light"
                       onClick={() => removeItemHandler(item.itemId)}
                     >
-                      <i className='fas fa-trash'></i>
+                      <i className="fas fa-trash"></i>
                     </Button>
                   </Col>
                 </Row>
@@ -191,25 +194,25 @@ const BagScreen = () => {
           </ListGroup>
         )}
       </Col>
-      <Col md={4} className='mt-3'>
-        <Card className='mb-2 mt-5'>
-          <ListGroup variant='flush'>
+      <Col md={4} className="mt-3">
+        <Card className="mb-2 mt-5">
+          <ListGroup variant="flush">
             <ListGroup.Item>
-              <div className='row'>
-                <div className='col-md-12 d-flex'>
+              <div className="row">
+                <div className="col-md-12 d-flex">
                   <strong>Shipping: </strong>
-                  <div className='ml-auto'>Same day</div>
+                  <div className="ml-auto">Same day</div>
                 </div>
               </div>
             </ListGroup.Item>
           </ListGroup>
         </Card>
-        <Card className='mb-2'>
-          <ListGroup variant='flush'>
+        <Card className="mb-2">
+          <ListGroup variant="flush">
             <ListGroup.Item>
               <Row>
-                <div className='col-md-12 d-flex'>
-                  <strong className='mr-2'>Ship to: </strong> {fullName} <br />
+                <div className="col-md-12 d-flex">
+                  <strong className="mr-2">Ship to: </strong> {fullName} <br />
                   {address[0]?.address}
                   <br />
                   {address[0]?.city}, {address[0]?.province}
@@ -222,12 +225,12 @@ const BagScreen = () => {
           </ListGroup>
         </Card>
         <Card>
-          <ListGroup variant='flush'>
+          <ListGroup variant="flush">
             <ListGroup.Item>
               <Row>
-                <div className='col-md-12 d-flex'>
+                <div className="col-md-12 d-flex">
                   <strong>Subtotal: </strong>
-                  <div className='ml-auto'>
+                  <div className="ml-auto">
                     CAD$
                     {Number(
                       cartItems.reduce(
@@ -237,13 +240,13 @@ const BagScreen = () => {
                     ).toFixed(2)}
                   </div>
                 </div>
-                <div className='col-md-12 d-flex'>
+                <div className="col-md-12 d-flex">
                   <strong>Shipping: </strong>
-                  <div className='ml-auto'>CAD$00.00</div>
+                  <div className="ml-auto">CAD$00.00</div>
                 </div>
-                <div className='col-md-12 d-flex mt-2'>
+                <div className="col-md-12 d-flex mt-2">
                   <h4>Total: </h4>
-                  <div className='ml-auto'>
+                  <div className="ml-auto">
                     CAD$
                     {Number(
                       cartItems.reduce(

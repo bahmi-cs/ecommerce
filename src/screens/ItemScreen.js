@@ -65,9 +65,11 @@ const ItemScreen = ({ match }) => {
   }, []);
 
   const addToCartHandler = () => {
-    let cartCopy = [...cartItems];
+    // let cartCopy = [...cartItems];
+    let products = [];
+
     console.log(value);
-    // let cartCopy = [...value];
+    let cartCopy = [...value];
 
     let existingItem = cartCopy.find(
       (cartItem) => cartItem.itemId === product.itemId
@@ -82,13 +84,13 @@ const ItemScreen = ({ match }) => {
     }
 
     console.log(`cartCopy`, cartCopy);
-    // setCartItems(cartCopy);
-    // setValue('cartCopy');
 
     let stringCart = JSON.stringify(cartCopy);
     localStorage.setItem('cart', stringCart);
 
-    newValue();
+    products.push(...cartCopy);
+
+    newValue(products);
 
     console.log(value);
 

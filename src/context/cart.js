@@ -3,10 +3,10 @@ import { createContext, useState } from 'react';
 const CartContext = createContext();
 
 const CartContextProvider = ({ children }) => {
-  const [value, setValue] = useState('hola');
+  let [value, setValue] = useState([]);
 
-  const newValue = () => {
-    setValue('oka');
+  const newValue = (data) => {
+    setValue(data);
   };
 
   return (

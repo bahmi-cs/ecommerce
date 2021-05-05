@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-import { Nav, Navbar, NavDropdown, Container } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import { useHistory } from "react-router-dom";
-import { FirebaseContext } from "../context/firebase";
-import { useAuthListener } from "../hooks";
+import React, { useContext } from 'react';
+import { Nav, Navbar, NavDropdown, Container } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { useHistory, Link } from 'react-router-dom';
+import { FirebaseContext } from '../context/firebase';
+import { useAuthListener } from '../hooks';
 
 const Header = () => {
   const history = useHistory();
@@ -14,20 +14,36 @@ const Header = () => {
     <header>
       <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
         <Container>
-          <Navbar.Brand href="/">Shopping Central</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">
+            Shopping Central
+          </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
-              <Nav.Link href="/">Home</Nav.Link>
-              {user ? <Nav.Link href="/updates">Updates</Nav.Link> : ""}
+              <Nav.Link as={Link} to="/">
+                Home
+              </Nav.Link>
+              {user ? (
+                <Nav.Link as={Link} to="/updates">
+                  Updates
+                </Nav.Link>
+              ) : (
+                ''
+              )}
               {user ? (
                 <>
-                  <Nav.Link href="/orders">Orders</Nav.Link>
+                  <Nav.Link as={Link} to="/orders">
+                    Orders
+                  </Nav.Link>
                 </>
               ) : (
-                ""
+                ''
               )}
-              {user ? <Nav.Link href="/bag">Bag</Nav.Link> : undefined}
+              {user ? (
+                <Nav.Link as={Link} to="/bag">
+                  Bag
+                </Nav.Link>
+              ) : undefined}
               {user ? (
                 <NavDropdown title="Account" id="username">
                   <LinkContainer to="/profile">
@@ -36,7 +52,7 @@ const Header = () => {
                   <NavDropdown.Item
                     onClick={() => {
                       firebase.auth().signOut();
-                      window.location.href = "/";
+                      window.location.href = '/';
                     }}
                   >
                     Sign Out
